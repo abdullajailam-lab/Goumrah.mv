@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,16 +130,15 @@
             color: white;
         }
         .hero {
-    background: url('img.5.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat; /* Optional but recommended */
-    color: rgb(255, 239, 239);
-    text-align: center;
-    padding: 6rem 1.5rem;
-    position: relative;
-}
-
+            background: url('img.5.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: rgb(255, 239, 239);
+            text-align: center;
+            padding: 6rem 1.5rem;
+            position: relative;
+        }
         .hero-content {
             position: relative;
             z-index: 2;
@@ -513,7 +511,6 @@
         .btn-full {
             width: 100%;
         }
-
         /* === NEW AUTH MODAL STYLES === */
         .auth-card {
             max-width: 480px;
@@ -635,7 +632,6 @@
             font-weight: 700;
             text-decoration: none;
         }
-
         /* Floating WhatsApp Button */
         .whatsapp-float {
             position: fixed;
@@ -661,45 +657,244 @@
         }
         /* Responsive */
         @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                padding: 0.5rem 1rem;
+            }
+
+            .logo h1 {
+                font-size: 1.4rem;
+            }
+
+            .mobile-menu {
+                display: block;
+                margin-left: auto;
+                font-size: 1.4rem;
+                z-index: 1001;
+            }
+
             nav ul {
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 70px;
+                top: 60px;
                 left: 0;
                 width: 100%;
                 background: var(--primary);
-                padding: 1.2rem 0;
+                padding: 1rem 0;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
             }
+
             nav ul.show {
                 display: flex;
             }
+
             nav ul li {
                 margin: 0;
-                padding: 0.9rem 0;
+                padding: 0.7rem 1.5rem;
                 text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
             }
-            .mobile-menu {
-                display: block;
+
+            nav ul li:last-child {
+                border-bottom: none;
             }
+
+            nav ul li a {
+                font-size: 1rem;
+                padding: 0.3rem 0;
+            }
+
+            .auth-buttons {
+                display: none;
+            }
+
+            .mobile-auth-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 1rem 0;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                background: var(--primary);
+            }
+
+            .mobile-auth-buttons .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                border-radius: 20px;
+            }
+
+            .hero {
+                padding: 4rem 1rem;
+            }
+
             .hero h2 {
-                font-size: 2.1rem;
+                font-size: 1.8rem;
+                line-height: 1.3;
             }
+
             .hero p {
-                font-size: 1.1rem;
+                font-size: 1rem;
+                max-width: 100%;
             }
-            .groups-grid, .agencies-grid {
-                grid-template-columns: 1fr;
+
+            .hero .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 1rem;
             }
+
+            .tabs-container {
+                gap: 0.8rem;
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
             .filter-container {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 1rem;
             }
+
             .filter-group {
+                min-width: 100%;
                 max-width: 100%;
             }
-            .auth-buttons {
-                display: none;
+
+            .filter-group select,
+            .filter-group input {
+                font-size: 0.95rem;
+                padding: 0.6rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .groups-grid,
+            .agencies-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .group-card,
+            .agency-card {
+                margin: 0;
+            }
+
+            .group-image {
+                height: 180px;
+            }
+
+            .group-content {
+                padding: 1.2rem;
+            }
+
+            .group-title {
+                font-size: 1.2rem;
+            }
+
+            .group-price {
+                font-size: 0.95rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .group-details {
+                gap: 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .group-description {
+                font-size: 0.9rem;
+            }
+
+            .feature {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.6rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-column h3 {
+                font-size: 1.1rem;
+            }
+
+            .footer-column p {
+                font-size: 0.95rem;
+            }
+
+            .social-links {
+                gap: 0.8rem;
+            }
+
+            .social-links a {
+                width: 36px;
+                height: 36px;
+                font-size: 1.4rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 2rem auto;
+                border-radius: 12px;
+            }
+
+            .auth-card {
+                max-width: 440px;
+                border-radius: 20px;
+            }
+
+            .auth-header {
+                padding: 1.5rem;
+            }
+
+            .auth-header h3 {
+                font-size: 1.5rem;
+            }
+
+            .auth-body {
+                padding: 1.5rem;
+            }
+
+            .auth-input {
+                padding: 0.9rem 0.9rem 0.9rem 45px;
+                font-size: 0.95rem;
+                border-radius: 12px;
+            }
+
+            .auth-label {
+                left: 45px;
+                font-size: 0.9rem;
+            }
+
+            .auth-footer {
+                margin: 1rem 0;
+                font-size: 0.9rem;
+            }
+
+            .auth-divider {
+                margin: 1.2rem 0;
+                font-size: 0.9rem;
+            }
+
+            .auth-toggle {
+                margin-top: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -722,6 +917,11 @@
                     <li><a href="#hajj">Hajj</a></li>
                     <li><a href="#agencies">Agencies</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <!-- Mobile Auth Buttons -->
+                    <div class="mobile-auth-buttons">
+                        <button class="btn btn-outline" id="login-btn-mobile">Login</button>
+                        <button class="btn" id="register-btn-mobile">Register</button>
+                    </div>
                 </ul>
             </nav>
             <div class="auth-buttons" id="auth-buttons">
@@ -852,7 +1052,6 @@
     <a href="https://wa.me/9601234567?text=Hello%20GoUmrah.mv!%20I%20have%20a%20question%20about%20Umrah%20packages." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
-
     <!-- ✨ NEW: Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content auth-card">
@@ -889,108 +1088,107 @@
             </div>
         </div>
     </div>
-
     <!-- ✨ Ultra-Modern Register Modal -->
-<div class="modal" id="register-modal">
-    <div class="modal-content" style="max-width: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(13, 59, 42, 0.25);">
-        <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 2.2rem; text-align: center; color: white; position: relative;">
-            <h3 style="font-family: 'Amiri', serif; font-size: 1.8rem; margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
-                <i class="fas fa-user-plus" style="color: var(--secondary);"></i> Create Your Account
-            </h3>
-            <p style="margin-top: 0.4rem; opacity: 0.9; font-size: 0.95rem;">Join thousands of pilgrims on their sacred journey</p>
-            <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.15); width: 34px; height: 34px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
-        </div>
-        <div style="padding: 2.4rem;">
-            <form id="register-form">
-                <!-- Full Name -->
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <input type="text" id="reg-name" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                        <label for="reg-name" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Full Name (as in Passport)</label>
+    <div class="modal" id="register-modal">
+        <div class="modal-content" style="max-width: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(13, 59, 42, 0.25);">
+            <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 2.2rem; text-align: center; color: white; position: relative;">
+                <h3 style="font-family: 'Amiri', serif; font-size: 1.8rem; margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
+                    <i class="fas fa-user-plus" style="color: var(--secondary);"></i> Create Your Account
+                </h3>
+                <p style="margin-top: 0.4rem; opacity: 0.9; font-size: 0.95rem;">Join thousands of pilgrims on their sacred journey</p>
+                <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.15); width: 34px; height: 34px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+            </div>
+            <div style="padding: 2.4rem;">
+                <form id="register-form">
+                    <!-- Full Name -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="text" id="reg-name" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-name" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Full Name (as in Passport)</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Email -->
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <input type="email" id="reg-email" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                        <label for="reg-email" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Email Address</label>
+                    <!-- Email -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="email" id="reg-email" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-email" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Email Address</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Phone -->
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-phone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <input type="tel" id="reg-phone" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                        <label for="reg-phone" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Phone (+960)</label>
+                    <!-- Phone -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-phone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="tel" id="reg-phone" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-phone" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Phone (+960)</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Traveling With -->
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <select id="reg-travel-type" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
-                            <option value=""></option>
-                            <option value="individual">Myself Only</option>
-                            <option value="family">Family (Spouse & Children)</option>
-                            <option value="group">Group (Friends or Others)</option>
-                        </select>
-                        <label for="reg-travel-type" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Traveling With</label>
+                    <!-- Traveling With -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <select id="reg-travel-type" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
+                                <option value=""></option>
+                                <option value="individual">Myself Only</option>
+                                <option value="family">Family (Spouse & Children)</option>
+                                <option value="group">Group (Friends or Others)</option>
+                            </select>
+                            <label for="reg-travel-type" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Traveling With</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Password -->
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <input type="password" id="reg-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                        <label for="reg-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Password</label>
+                    <!-- Password -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="password" id="reg-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Password</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Confirm Password -->
-                <div class="form-group" style="margin-bottom: 1.6rem;">
-                    <div style="position: relative;">
-                        <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                        <input type="password" id="reg-confirm-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                        <label for="reg-confirm-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Confirm Password</label>
+                    <!-- Confirm Password -->
+                    <div class="form-group" style="margin-bottom: 1.6rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="password" id="reg-confirm-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-confirm-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Confirm Password</label>
+                        </div>
                     </div>
-                </div>
-                <!-- Verification Method -->
-                <div class="form-group" style="margin-bottom: 1.6rem;">
-                    <label style="display: block; margin-bottom: 0.6rem; font-weight: 600; color: var(--dark);">Verification Method</label>
-                    <div style="display: flex; gap: 1.2rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
-                            <input type="radio" name="verify-method" value="email" checked>
-                            <i class="fas fa-envelope" style="color: var(--secondary);"></i> Email
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
-                            <input type="radio" name="verify-method" value="phone">
-                            <i class="fas fa-sms" style="color: var(--secondary);"></i> SMS
-                        </label>
+                    <!-- Verification Method -->
+                    <div class="form-group" style="margin-bottom: 1.6rem;">
+                        <label style="display: block; margin-bottom: 0.6rem; font-weight: 600; color: var(--dark);">Verification Method</label>
+                        <div style="display: flex; gap: 1.2rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                                <input type="radio" name="verify-method" value="email" checked>
+                                <i class="fas fa-envelope" style="color: var(--secondary);"></i> Email
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                                <input type="radio" name="verify-method" value="phone">
+                                <i class="fas fa-sms" style="color: var(--secondary);"></i> SMS
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <!-- OTP Section (Hidden by default) -->
-                <div class="form-group" id="otp-section" style="display: none; margin-top: 0.5rem;">
-                    <label style="display: block; margin-bottom: 0.6rem; font-weight: 600;">Enter 4-Digit OTP</label>
-                    <div style="display: flex; gap: 0.6rem;">
-                        <input type="text" maxlength="1" oninput="moveToNext(this, 1)" id="otp1" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                        <input type="text" maxlength="1" oninput="moveToNext(this, 2)" onkeydown="moveToPrev(this, 1)" id="otp2" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                        <input type="text" maxlength="1" oninput="moveToNext(this, 3)" onkeydown="moveToPrev(this, 2)" id="otp3" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                        <input type="text" maxlength="1" oninput="moveToNext(this, 4)" onkeydown="moveToPrev(this, 3)" id="otp4" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
+                    <!-- OTP Section (Hidden by default) -->
+                    <div class="form-group" id="otp-section" style="display: none; margin-top: 0.5rem;">
+                        <label style="display: block; margin-bottom: 0.6rem; font-weight: 600;">Enter 4-Digit OTP</label>
+                        <div style="display: flex; gap: 0.6rem;">
+                            <input type="text" maxlength="1" oninput="moveToNext(this, 1)" id="otp1" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
+                            <input type="text" maxlength="1" oninput="moveToNext(this, 2)" onkeydown="moveToPrev(this, 1)" id="otp2" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
+                            <input type="text" maxlength="1" oninput="moveToNext(this, 3)" onkeydown="moveToPrev(this, 2)" id="otp3" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
+                            <input type="text" maxlength="1" oninput="moveToNext(this, 4)" onkeydown="moveToPrev(this, 3)" id="otp4" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
+                        </div>
+                        <button type="button" class="btn btn-outline" id="resend-otp" style="margin-top: 0.8rem; width: 100%; border-radius: 12px;">Resend OTP</button>
                     </div>
-                    <button type="button" class="btn btn-outline" id="resend-otp" style="margin-top: 0.8rem; width: 100%; border-radius: 12px;">Resend OTP</button>
-                </div>
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-full" id="register-submit" style="padding: 1rem; font-weight: 700; font-size: 1.05rem; border-radius: 14px;">Create Account</button>
-                <!-- Toggle to Login -->
-                <div style="text-align: center; margin-top: 1.8rem; font-size: 0.95rem; color: var(--gray);">
-                    Already have an account?  
-                    <a href="#" id="switch-to-login" style="color: var(--secondary); font-weight: 700; text-decoration: none;">Sign in</a>
-                </div>
-            </form>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-full" id="register-submit" style="padding: 1rem; font-weight: 700; font-size: 1.05rem; border-radius: 14px;">Create Account</button>
+                    <!-- Toggle to Login -->
+                    <div style="text-align: center; margin-top: 1.8rem; font-size: 0.95rem; color: var(--gray);">
+                        Already have an account?  
+                        <a href="#" id="switch-to-login" style="color: var(--secondary); font-weight: 700; text-decoration: none;">Sign in</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
     <!-- Other Modals (unchanged) -->
     <div class="modal" id="package-detail-modal">
         <div class="modal-content">
@@ -1006,7 +1204,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal" id="booking-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1064,7 +1261,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal" id="inquiry-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1235,9 +1431,7 @@
             { id: 9, name: "ZamZam Hajj & Umrah", contact: "+960 799 9065 / +960 777 6174 / +960 791 1121", phone: "9607999065", type: "zamzam" },
             { id: 10, name: "Tazkiyah Pvt Ltd", contact: "+960 777 9471", phone: "9607779471", type: "tazkiyah" },
         ];
-
         let currentPackage = null;
-
         // === AUTH STATE MANAGEMENT ===
         function updateAuthUI() {
             const isLoggedIn = localStorage.getItem('goumrah_user');
@@ -1251,20 +1445,17 @@
                 logoutButton.style.display = 'none';
             }
         }
-
         function login(email) {
             localStorage.setItem('goumrah_user', JSON.stringify({ email }));
             updateAuthUI();
             hideAllModals();
             alert('✅ Login successful! Welcome back.');
         }
-
         function logout() {
             localStorage.removeItem('goumrah_user');
             updateAuthUI();
             alert('👋 You have been logged out.');
         }
-
         // === DISPLAY FUNCTIONS ===
         function displayGroups(groups, containerId) {
             const container = document.getElementById(containerId);
@@ -1324,7 +1515,6 @@
                 });
             });
         }
-
         function showPackageDetail(packageData) {
             currentPackage = packageData;
             const modalContent = document.getElementById('package-detail-content');
@@ -1375,7 +1565,6 @@
             `;
             document.getElementById('package-detail-modal').style.display = 'block';
         }
-
         function openBookingModal() {
             if (currentPackage) {
                 document.getElementById('package-name').value = currentPackage.title;
@@ -1384,7 +1573,6 @@
                 document.getElementById('booking-modal').style.display = 'block';
             }
         }
-
         function generatePilgrimFields(count) {
             const container = document.getElementById('pilgrim-list');
             container.innerHTML = '';
@@ -1405,7 +1593,6 @@
                 container.appendChild(entry);
             }
         }
-
         function displayAgencies(list) {
             const container = document.getElementById('agencies-container');
             container.innerHTML = '';
@@ -1433,12 +1620,12 @@
                         document.getElementById('inquiry-agency-phone').value = a.phone;
                         document.getElementById('inquiry-modal').style.display = 'block';
                     } else {
-                        alert(`📞 ${a.name}\nℹ️ Contact details not available.`);
+                        alert(`📞 ${a.name}
+ℹ️ Contact details not available.`);
                     }
                 });
             });
         }
-
         // === FILTERING ===
         function filterGroups() {
             const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
@@ -1477,11 +1664,9 @@
             if (activeTab === 'umrah') displayGroups(list, 'umrah-container');
             else displayGroups(list, 'hajj-container');
         }
-
         function filterAgencies() {
             displayAgencies(agencies);
         }
-
         // === MODAL HANDLERS ===
         function showLoginModal() {
             document.getElementById('login-modal').style.display = 'block';
@@ -1500,7 +1685,6 @@
             hideAllModals();
             showLoginModal();
         }
-
         // === OTP UTILS ===
         function moveToNext(current, nextIndex) {
             if (current.value.length === 1 && nextIndex <= 4) {
@@ -1521,20 +1705,22 @@
             alert(`✅ OTP sent to your ${method}. Please check and enter below.`);
             return otp;
         }
-
         // === INIT ===
         document.addEventListener('DOMContentLoaded', () => {
             updateAuthUI();
             displayGroups(umrahGroups, 'umrah-container');
             displayGroups(hajjGroups, 'hajj-container');
             displayAgencies(agencies);
-
             // Auth buttons
             document.getElementById('login-btn').addEventListener('click', showLoginModal);
             document.getElementById('register-btn').addEventListener('click', showRegisterModal);
             document.getElementById('logout-btn').addEventListener('click', logout);
             document.getElementById('switch-to-register').addEventListener('click', switchToRegister);
             document.getElementById('switch-to-login').addEventListener('click', switchToLogin);
+
+            // Mobile auth buttons
+            document.getElementById('login-btn-mobile').addEventListener('click', showLoginModal);
+            document.getElementById('register-btn-mobile').addEventListener('click', showRegisterModal);
 
             // Close modals
             document.querySelectorAll('.close-modal').forEach(btn => {
@@ -1545,14 +1731,12 @@
                     hideAllModals();
                 }
             });
-
             // Login form
             document.getElementById('login-form').addEventListener('submit', e => {
                 e.preventDefault();
                 const email = document.getElementById('login-email').value;
                 login(email);
             });
-
             // Register form
             document.getElementById('register-form').addEventListener('submit', e => {
                 e.preventDefault();
@@ -1585,13 +1769,11 @@
                     }
                 };
             });
-
             document.getElementById('resend-otp').addEventListener('click', () => {
                 const method = document.querySelector('input[name="verify-method"]:checked').value;
                 const value = method === 'email' ? document.getElementById('reg-email').value : document.getElementById('reg-phone').value;
                 sendOTP(method, value);
             });
-
             // Booking form
             document.getElementById('booking-form').addEventListener('submit', e => {
                 e.preventDefault();
@@ -1612,7 +1794,6 @@
                     hideAllModals();
                 }, 500);
             });
-
             // Inquiry form
             document.getElementById('inquiry-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1622,11 +1803,16 @@
                 const email = document.getElementById('inq-email').value;
                 const phone = document.getElementById('inq-phone').value;
                 const userMessage = document.getElementById('inq-message').value;
-                let message = `Hello ${agencyName},\n`;
-                message += `I am ${fullName}.\n`;
-                if (email) message += `Email: ${email}\n`;
-                message += `Phone: +960 ${phone}\n`;
-                message += `Inquiry: ${userMessage}\n`;
+                let message = `Hello ${agencyName},
+`;
+                message += `I am ${fullName}.
+`;
+                if (email) message += `Email: ${email}
+`;
+                message += `Phone: +960 ${phone}
+`;
+                message += `Inquiry: ${userMessage}
+`;
                 message += `Sent via GoUmrah.mv`;
                 const encodedMessage = encodeURIComponent(message);
                 window.open(`https://wa.me/${agencyPhone}?text=${encodedMessage}`, '_blank');
@@ -1635,8 +1821,7 @@
                 hideAllModals();
                 document.getElementById('inquiry-form').reset();
             });
-
-            // Tabs & Filters & Mobile Menu — unchanged
+            // Tabs & Filters & Mobile Menu
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
