@@ -6,8 +6,6 @@
     <title>GoUmrah.mv – Maldives Umrah & Hajj Packages</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- SUPABASE CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #0d3b2a;
@@ -771,6 +769,7 @@
             </div>
         </div>
     </header>
+
     <section class="hero" id="home">
         <div class="hero-content">
             <h2>Begin Your Sacred Journey with GoUmrah.mv</h2>
@@ -778,6 +777,7 @@
             <a href="#umrah" class="btn">Explore Packages</a>
         </div>
     </section>
+
     <section class="tabs">
         <div class="tabs-container">
             <button class="tab-btn active" data-tab="umrah">Umrah Packages</button>
@@ -785,6 +785,7 @@
             <button class="tab-btn" data-tab="agencies">Travel Agencies</button>
         </div>
     </section>
+
     <section class="filters">
         <div class="filter-container">
             <div class="filter-group">
@@ -821,6 +822,7 @@
             </div>
         </div>
     </section>
+
     <section class="groups-section" id="umrah">
         <div class="section-header">
             <h2>Umrah Packages from Maldives</h2>
@@ -828,6 +830,7 @@
         </div>
         <div class="groups-grid" id="umrah-container"></div>
     </section>
+
     <section class="groups-section" id="hajj" style="display: none;">
         <div class="section-header">
             <h2>Hajj 1446H (2025) Packages</h2>
@@ -835,6 +838,7 @@
         </div>
         <div class="groups-grid" id="hajj-container"></div>
     </section>
+
     <section class="agencies-section" id="agencies" style="display: none;">
         <div class="agencies-container">
             <div class="section-header">
@@ -844,6 +848,7 @@
             <div class="agencies-grid" id="agencies-container"></div>
         </div>
     </section>
+
     <footer id="contact">
         <div class="footer-container">
             <div class="footer-column">
@@ -868,7 +873,7 @@
             <div class="footer-column">
                 <h3>Contact Us</h3>
                 <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> Male’, Republic of Maldives</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Male', Republic of Maldives</li>
                     <li><i class="fas fa-phone"></i> +960 123 4567</li>
                     <li><i class="fas fa-envelope"></i> info@goumrah.mv</li>
                     <li><i class="fas fa-clock"></i> Sunday–Thursday: 9AM – 5PM</li>
@@ -879,18 +884,22 @@
             <p>&copy; 2025 GoUmrah.mv – All Rights Reserved</p>
         </div>
     </footer>
+
     <a href="https://wa.me/9601234567?text=Hello%20GoUmrah.mv!%20I%20have%20a%20question%20about%20Umrah%20packages." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Modals -->
-    <!-- (Modals remain unchanged — only JS logic updated below) -->
+    <!-- Modals (Login, Register, Package Detail, Booking, Inquiry) -->
+    <!-- They are included in the script below as part of the DOM -->
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // === SUPABASE INIT ===
-        const supabaseUrl = 'https://bkgagnttyqgtnxamvhcx.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';
-        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        // === SUPERBASE CONFIGURATION ===
+        const SUPABASE_URL = 'https://bkgagnttyqgtnxamvhcx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // === CORRECTED IMAGE NAMES (no dots!) ===
         const umrahGroups = [
@@ -991,6 +1000,7 @@
                 type: "standard"
             }
         ];
+
         const hajjGroups = [
             {
                 id: 101,
@@ -1017,6 +1027,7 @@
                 type: "premium"
             }
         ];
+
         const agencies = [
             { id: 1, name: "Maldives Hajj Corporation Limited (MHCL)", contact: "+960 796 1012, Hotline: 1435", phone: "9607961012", type: "mhcl" },
             { id: 2, name: "Acro Pvt Ltd", contact: "+960 778 4578", phone: "9607784578", type: "other" },
@@ -1029,7 +1040,102 @@
             { id: 9, name: "ZamZam Hajj & Umrah", contact: "+960 799 9065 / +960 777 6174 / +960 791 1121", phone: "9607999065", type: "zamzam" },
             { id: 10, name: "Tazkiyah Pvt Ltd", contact: "+960 777 9471", phone: "9607779471", type: "tazkiyah" },
         ];
+
         let currentPackage = null;
+
+        // === SUPERBASE FUNCTIONS ===
+        async function saveUserToSupabase(userData) {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .insert([
+                        {
+                            email: userData.email,
+                            full_name: userData.name,
+                            phone: userData.phone,
+                            travel_type: userData.travelType,
+                            created_at: new Date().toISOString()
+                        }
+                    ])
+                    .select();
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error saving user to Supabase:', error);
+                return null;
+            }
+        }
+
+        async function saveBookingToSupabase(bookingData) {
+            try {
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .insert([
+                        {
+                            package_id: bookingData.packageId,
+                            package_name: bookingData.packageName,
+                            user_email: bookingData.userEmail,
+                            user_phone: bookingData.userPhone,
+                            passengers: bookingData.passengers,
+                            pilgrim_names: bookingData.pilgrimNames,
+                            special_requests: bookingData.specialRequests,
+                            status: 'pending',
+                            created_at: new Date().toISOString()
+                        }
+                    ])
+                    .select();
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error saving booking to Supabase:', error);
+                return null;
+            }
+        }
+
+        async function saveInquiryToSupabase(inquiryData) {
+            try {
+                const { data, error } = await supabase
+                    .from('inquiries')
+                    .insert([
+                        {
+                            agency_name: inquiryData.agencyName,
+                            agency_phone: inquiryData.agencyPhone,
+                            user_name: inquiryData.userName,
+                            user_email: inquiryData.userEmail,
+                            user_phone: inquiryData.userPhone,
+                            message: inquiryData.message,
+                            status: 'new',
+                            created_at: new Date().toISOString()
+                        }
+                    ])
+                    .select();
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error saving inquiry to Supabase:', error);
+                return null;
+            }
+        }
+
+        async function getUserBookings(email) {
+            try {
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .select('*')
+                    .eq('user_email', email)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error fetching user bookings:', error);
+                return [];
+            }
+        }
+
         // === AUTH STATE ===
         function updateAuthUI() {
             const isLoggedIn = localStorage.getItem('goumrah_user');
@@ -1043,17 +1149,64 @@
                 logoutButton.style.display = 'none';
             }
         }
-        function login(email) {
-            localStorage.setItem('goumrah_user', JSON.stringify({ email }));
-            updateAuthUI();
-            hideAllModals();
-            alert('✅ Login successful! Welcome back.');
+
+        async function login(email, password) {
+            try {
+                // For demo purposes, we'll use simple auth
+                // In production, you would use Supabase Auth
+                const userData = {
+                    email: email,
+                    name: email.split('@')[0],
+                    id: Date.now()
+                };
+                
+                localStorage.setItem('goumrah_user', JSON.stringify(userData));
+                updateAuthUI();
+                hideAllModals();
+                alert('✅ Login successful! Welcome back.');
+                
+                return true;
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('❌ Login failed. Please try again.');
+                return false;
+            }
         }
+
+        async function register(userData) {
+            try {
+                // Save user to Supabase
+                const supabaseResult = await saveUserToSupabase(userData);
+                
+                if (supabaseResult) {
+                    const user = {
+                        email: userData.email,
+                        name: userData.name,
+                        id: supabaseResult[0]?.id || Date.now()
+                    };
+                    
+                    localStorage.setItem('goumrah_user', JSON.stringify(user));
+                    updateAuthUI();
+                    hideAllModals();
+                    alert('✅ Registration successful! Welcome to GoUmrah.mv');
+                    
+                    return true;
+                } else {
+                    throw new Error('Failed to save user data');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('❌ Registration failed. Please try again.');
+                return false;
+            }
+        }
+
         function logout() {
             localStorage.removeItem('goumrah_user');
             updateAuthUI();
             alert('👋 You have been logged out.');
         }
+
         // === DISPLAY ===
         function displayGroups(groups, containerId) {
             const container = document.getElementById(containerId);
@@ -1093,6 +1246,7 @@
                 `;
                 container.appendChild(card);
             });
+
             document.querySelectorAll('.book-now').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const g = groups.find(x => x.id == btn.dataset.id);
@@ -1104,6 +1258,7 @@
                     }
                 });
             });
+
             document.querySelectorAll('.view-details').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const g = groups.find(x => x.id == btn.dataset.id);
@@ -1113,6 +1268,7 @@
                 });
             });
         }
+
         function showPackageDetail(packageData) {
             currentPackage = packageData;
             const modalContent = document.getElementById('package-detail-content');
@@ -1163,6 +1319,7 @@
             `;
             document.getElementById('package-detail-modal').style.display = 'block';
         }
+
         function openBookingModal() {
             if (currentPackage) {
                 document.getElementById('package-name').value = currentPackage.title;
@@ -1171,6 +1328,7 @@
                 document.getElementById('booking-modal').style.display = 'block';
             }
         }
+
         function generatePilgrimFields(count) {
             const container = document.getElementById('pilgrim-list');
             container.innerHTML = '';
@@ -1191,6 +1349,7 @@
                 container.appendChild(entry);
             }
         }
+
         function displayAgencies(list) {
             const container = document.getElementById('agencies-container');
             container.innerHTML = '';
@@ -1210,6 +1369,7 @@
                 `;
                 container.appendChild(card);
             });
+
             document.querySelectorAll('.contact-agency').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const a = agencies.find(x => x.id == btn.dataset.id);
@@ -1218,12 +1378,12 @@
                         document.getElementById('inquiry-agency-phone').value = a.phone;
                         document.getElementById('inquiry-modal').style.display = 'block';
                     } else {
-                        alert(`📞 ${a.name}
-ℹ️ Contact details not available.`);
+                        alert(`📞 ${a.name}\nℹ️ Contact details not available.`);
                     }
                 });
             });
         }
+
         // === FILTERING ===
         function filterGroups() {
             const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
@@ -1232,10 +1392,12 @@
             const dur = document.getElementById('duration').value;
             const price = document.getElementById('price-range').value;
             const pkgType = document.getElementById('package-type').value;
+
             if (month) {
                 const year = month.split('-')[0];
                 list = list.filter(g => g.departure.includes(year));
             }
+
             if (dur !== 'all') {
                 list = list.filter(g => {
                     const d = parseInt(g.duration) || 0;
@@ -1246,6 +1408,7 @@
                     return true;
                 });
             }
+
             if (price !== 'all') {
                 list = list.filter(g => {
                     const pText = g.price.replace(/[^\d]/g, '');
@@ -1256,65 +1419,80 @@
                     return true;
                 });
             }
+
             if (pkgType !== 'all') {
                 list = list.filter(g => g.type === pkgType);
             }
+
             if (activeTab === 'umrah') displayGroups(list, 'umrah-container');
             else displayGroups(list, 'hajj-container');
         }
+
         function filterAgencies() {
             displayAgencies(agencies);
         }
+
         // === MODALS ===
         function showLoginModal() {
             document.getElementById('login-modal').style.display = 'block';
         }
+
         function showRegisterModal() {
             document.getElementById('register-modal').style.display = 'block';
         }
+
         function hideAllModals() {
             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
         }
+
         function switchToRegister() {
             hideAllModals();
             showRegisterModal();
         }
+
         function switchToLogin() {
             hideAllModals();
             showLoginModal();
         }
+
         // === OTP UTILS ===
         function moveToNext(current, nextIndex) {
             if (current.value.length === 1 && nextIndex <= 4) {
                 document.getElementById(`otp${nextIndex}`).focus();
             }
         }
+
         function moveToPrev(current, prevIndex) {
             if (current.value.length === 0 && prevIndex >= 1) {
                 document.getElementById(`otp${prevIndex}`).focus();
             }
         }
+
         function generateOTP() {
             return Math.floor(1000 + Math.random() * 9000).toString();
         }
+
         function sendOTP(method, value) {
             const otp = generateOTP();
             console.log(`OTP ${otp} sent to ${method}: ${value}`);
             alert(`✅ OTP sent to your ${method}. Please check and enter below.`);
             return otp;
         }
+
         // === INIT ===
         document.addEventListener('DOMContentLoaded', () => {
             updateAuthUI();
             displayGroups(umrahGroups, 'umrah-container');
             displayGroups(hajjGroups, 'hajj-container');
             displayAgencies(agencies);
+
             // Auth buttons
             document.getElementById('login-btn').addEventListener('click', showLoginModal);
             document.getElementById('register-btn').addEventListener('click', showRegisterModal);
             document.getElementById('logout-btn').addEventListener('click', logout);
             document.getElementById('switch-to-register').addEventListener('click', switchToRegister);
             document.getElementById('switch-to-login').addEventListener('click', switchToLogin);
+
             // Close modals
             document.querySelectorAll('.close-modal').forEach(btn => {
                 btn.addEventListener('click', hideAllModals);
@@ -1324,20 +1502,22 @@
                     hideAllModals();
                 }
             });
+
             // Login form
-            document.getElementById('login-form').addEventListener('submit', e => {
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = document.getElementById('login-email').value;
-                login(email);
+                const password = document.getElementById('login-password').value;
+                await login(email, password);
             });
 
-            // REGISTER FORM - SAVES TO SUPABASE
+            // Register form
             document.getElementById('register-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const name = document.getElementById('reg-name').value;
                 const email = document.getElementById('reg-email').value;
                 const phone = document.getElementById('reg-phone').value;
-                const travel_type = document.getElementById('reg-travel-type').value;
+                const travelType = document.getElementById('reg-travel-type').value;
                 const password = document.getElementById('reg-password').value;
                 const confirmPassword = document.getElementById('reg-confirm-password').value;
 
@@ -1346,37 +1526,15 @@
                     return;
                 }
 
-                const method = document.querySelector('input[name="verify-method"]:checked').value;
-                const otp = sendOTP(method, method === 'email' ? email : phone);
-
-                document.getElementById('otp-section').style.display = 'block';
-                document.getElementById('register-submit').textContent = 'Verify & Register';
-
-                document.getElementById('register-submit').onclick = async function verify(e) {
-                    e.preventDefault();
-                    const code = document.getElementById('otp1').value +
-                                  document.getElementById('otp2').value +
-                                  document.getElementById('otp3').value +
-                                  document.getElementById('otp4').value;
-                    if (code === otp) {
-                        // Save to Supabase
-                        const { data, error } = await supabase
-                            .from('users')
-                            .insert([{ name, email, phone, travel_type }]);
-
-                        if (error) {
-                            console.error('Supabase User Save Error:', error);
-                            alert('⚠️ Account created, but profile save failed.');
-                        }
-
-                        login(email);
-                        document.getElementById('register-form').reset();
-                        document.getElementById('otp-section').style.display = 'none';
-                        document.getElementById('register-submit').textContent = 'Create Account';
-                    } else {
-                        alert('❌ Invalid OTP. Please try again.');
-                    }
+                const userData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    travelType: travelType,
+                    password: password
                 };
+
+                await register(userData);
             });
 
             document.getElementById('resend-otp').addEventListener('click', () => {
@@ -1385,53 +1543,54 @@
                 sendOTP(method, value);
             });
 
-            // BOOKING FORM - SAVES TO SUPABASE
+            // Booking form
             document.getElementById('booking-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
                 const passengers = parseInt(document.getElementById('passengers').value) || 1;
-                const pilgrimData = [];
+                const pilgrimNames = [];
+                const pilgrimDOBs = [];
+                
                 for (let i = 1; i <= passengers; i++) {
-                    const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value || '';
-                    const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || null;
-                    pilgrimData.push({ name, dob });
+                    const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value || 'N/A';
+                    const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || 'N/A';
+                    pilgrimNames.push(name);
+                    pilgrimDOBs.push(dob);
                 }
-
+                
                 const bookingData = {
-                    package_name: document.getElementById('package-name').value,
-                    pilgrims: pilgrimData,
-                    contact_email: document.getElementById('email').value,
-                    contact_phone: document.getElementById('phone').value,
-                    special_requests: document.getElementById('message').value || null,
-                    agency: currentPackage?.agent || 'Unknown'
+                    packageId: currentPackage.id,
+                    packageName: currentPackage.title,
+                    userEmail: document.getElementById('email').value,
+                    userPhone: document.getElementById('phone').value,
+                    passengers: passengers,
+                    pilgrimNames: pilgrimNames,
+                    pilgrimDOBs: pilgrimDOBs,
+                    specialRequests: document.getElementById('message').value
                 };
 
-                // Save to Supabase
-                const { data, error } = await supabase
-                    .from('bookings')
-                    .insert([bookingData]);
-
-                if (error) {
-                    console.error('Supabase Booking Error:', error);
+                // Save booking to Supabase
+                const supabaseResult = await saveBookingToSupabase(bookingData);
+                
+                if (supabaseResult) {
+                    const agency = currentPackage ? currentPackage.agent : 'Unknown';
+                    document.getElementById('slip-package').textContent = document.getElementById('package-name').value;
+                    document.getElementById('slip-pilgrims').textContent = pilgrimNames.join(', ');
+                    document.getElementById('slip-contact').textContent = `${document.getElementById('email').value} | ${document.getElementById('phone').value}`;
+                    document.getElementById('slip-agency').textContent = agency;
+                    document.getElementById('booking-slip').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        alert(`✅ Booking request sent to ${agency}. They will contact you soon.`);
+                        hideAllModals();
+                    }, 500);
+                } else {
                     alert('❌ Failed to save booking. Please try again.');
-                    return;
                 }
-
-                // Show success slip
-                document.getElementById('slip-package').textContent = bookingData.package_name;
-                document.getElementById('slip-pilgrims').textContent = pilgrimData.map(p => p.name).join(', ');
-                document.getElementById('slip-contact').textContent = `${bookingData.contact_email} | ${bookingData.contact_phone}`;
-                document.getElementById('slip-agency').textContent = bookingData.agency;
-                document.getElementById('booking-slip').style.display = 'block';
-
-                setTimeout(() => {
-                    alert(`✅ Booking request sent successfully! ${bookingData.agency} will contact you soon.`);
-                    hideAllModals();
-                }, 500);
             });
 
-            // Inquiry form (unchanged)
-            document.getElementById('inquiry-form').addEventListener('submit', function(e) {
+            // Inquiry form
+            document.getElementById('inquiry-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const agencyName = document.getElementById('inquiry-agency-name').value;
                 const agencyPhone = document.getElementById('inquiry-agency-phone').value;
@@ -1439,23 +1598,35 @@
                 const email = document.getElementById('inq-email').value;
                 const phone = document.getElementById('inq-phone').value;
                 const userMessage = document.getElementById('inq-message').value;
-                let message = `Hello ${agencyName},
-`;
-                message += `I am ${fullName}.
-`;
-                if (email) message += `Email: ${email}
-`;
-                message += `Phone: +960 ${phone}
-`;
-                message += `Inquiry: ${userMessage}
-`;
-                message += `Sent via GoUmrah.mv`;
-                const encodedMessage = encodeURIComponent(message);
-                window.open(`https://wa.me/${agencyPhone}?text=${encodedMessage}`, '_blank');
-                window.open(`https://t.me/+${agencyPhone}`, '_blank');
-                alert('✅ Your inquiry has been sent via WhatsApp and Telegram!');
-                hideAllModals();
-                document.getElementById('inquiry-form').reset();
+
+                // Save inquiry to Supabase
+                const inquiryData = {
+                    agencyName: agencyName,
+                    agencyPhone: agencyPhone,
+                    userName: fullName,
+                    userEmail: email,
+                    userPhone: phone,
+                    message: userMessage
+                };
+
+                const supabaseResult = await saveInquiryToSupabase(inquiryData);
+
+                if (supabaseResult) {
+                    let message = `Hello ${agencyName},\n`;
+                    message += `I am ${fullName}.\n`;
+                    if (email) message += `Email: ${email}\n`;
+                    message += `Phone: +960 ${phone}\n`;
+                    message += `Inquiry: ${userMessage}\n`;
+                    message += `Sent via GoUmrah.mv`;
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/${agencyPhone}?text=${encodedMessage}`, '_blank');
+                    window.open(`https://t.me/+${agencyPhone}`, '_blank');
+                    alert('✅ Your inquiry has been sent via WhatsApp and Telegram!');
+                    hideAllModals();
+                    document.getElementById('inquiry-form').reset();
+                } else {
+                    alert('❌ Failed to save inquiry. Please try again.');
+                }
             });
 
             // Tabs
@@ -1516,7 +1687,6 @@
         });
     </script>
 
-    <!-- Modals (unchanged from original) -->
     <!-- Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content auth-card">
@@ -1547,12 +1717,13 @@
                     <button type="submit" class="btn btn-full" style="padding: 1rem; font-weight: 700; border-radius: 16px;">Sign In</button>
                     <div class="auth-divider"><span>or</span></div>
                     <div class="auth-toggle">
-                        Don’t have an account? <a href="#" id="switch-to-register">Create one</a>
+                        Don't have an account? <a href="#" id="switch-to-register">Create one</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
     <!-- Register Modal -->
     <div class="modal" id="register-modal">
         <div class="modal-content" style="max-width: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(13, 59, 42, 0.25);">
@@ -1612,29 +1783,6 @@
                             <label for="reg-confirm-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Confirm Password</label>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-bottom: 1.6rem;">
-                        <label style="display: block; margin-bottom: 0.6rem; font-weight: 600; color: var(--dark);">Verification Method</label>
-                        <div style="display: flex; gap: 1.2rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
-                                <input type="radio" name="verify-method" value="email" checked>
-                                <i class="fas fa-envelope" style="color: var(--secondary);"></i> Email
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
-                                <input type="radio" name="verify-method" value="phone">
-                                <i class="fas fa-sms" style="color: var(--secondary);"></i> SMS
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group" id="otp-section" style="display: none; margin-top: 0.5rem;">
-                        <label style="display: block; margin-bottom: 0.6rem; font-weight: 600;">Enter 4-Digit OTP</label>
-                        <div style="display: flex; gap: 0.6rem;">
-                            <input type="text" maxlength="1" oninput="moveToNext(this, 1)" id="otp1" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                            <input type="text" maxlength="1" oninput="moveToNext(this, 2)" onkeydown="moveToPrev(this, 1)" id="otp2" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                            <input type="text" maxlength="1" oninput="moveToNext(this, 3)" onkeydown="moveToPrev(this, 2)" id="otp3" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                            <input type="text" maxlength="1" oninput="moveToNext(this, 4)" onkeydown="moveToPrev(this, 3)" id="otp4" style="width: 50px; text-align: center; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1.2rem;">
-                        </div>
-                        <button type="button" class="btn btn-outline" id="resend-otp" style="margin-top: 0.8rem; width: 100%; border-radius: 12px;">Resend OTP</button>
-                    </div>
                     <button type="submit" class="btn btn-full" id="register-submit" style="padding: 1rem; font-weight: 700; font-size: 1.05rem; border-radius: 14px;">Create Account</button>
                     <div style="text-align: center; margin-top: 1.8rem; font-size: 0.95rem; color: var(--gray);">
                         Already have an account?  
@@ -1644,6 +1792,7 @@
             </div>
         </div>
     </div>
+
     <!-- Package Detail Modal -->
     <div class="modal" id="package-detail-modal">
         <div class="modal-content">
@@ -1659,6 +1808,7 @@
             </div>
         </div>
     </div>
+
     <!-- Booking Modal -->
     <div class="modal" id="booking-modal">
         <div class="modal-content">
@@ -1717,6 +1867,7 @@
             </div>
         </div>
     </div>
+
     <!-- Inquiry Modal -->
     <div class="modal" id="inquiry-modal">
         <div class="modal-content">
