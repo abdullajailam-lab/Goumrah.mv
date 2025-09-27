@@ -1800,6 +1800,13 @@
             document.getElementById('register-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const name = document.getElementById('reg-name').value;
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+    <div style="position: relative;">
+        <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+        <input type="text" id="reg-name" class="auth-input" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+        <label for="reg-name" class="auth-label">Full Name (as in Passport)</label>
+    </div>
+</div>
                 const email = document.getElementById('reg-email').value;
                 const phone = document.getElementById('reg-phone').value;
                 const travelType = document.getElementById('reg-travel-type').value;
@@ -1967,6 +1974,7 @@
     </script>
 </body>
 </html>
+
 
 
 
