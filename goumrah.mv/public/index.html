@@ -1106,8 +1106,34 @@
         const SUPABASE_URL = 'https://bkgagnttyqgtnxamvhcx.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';
         
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialize once (e.g., at the top of your script)
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// In your registration function
+async function handleRegister(email, password) {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      console.error('Supabase registration error:', error);
+      alert('❌ Registration failed: ' + (error.message || 'Unknown error'));
+      return;
+    }
+
+    if (data.user) {
+      alert('✅ Registration successful! Please check your email to confirm.');
+    } else {
+      // Email confirmation may be required
+      alert('✅ Registration started. Check your email for confirmation.');
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    alert('❌ Something went wrong. Please try again.');
+  }
+}
 
         // === DATA MANAGEMENT ===
         let umrahGroups = [];
@@ -1947,3 +1973,4 @@
     </script>
 </body>
 </html>
+
