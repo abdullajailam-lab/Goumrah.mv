@@ -889,20 +889,234 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Modals (Login, Register, Package Detail, Booking, Inquiry) -->
-    <!-- They are included in the script below as part of the DOM -->
+    <!-- Modals -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content auth-card">
+            <div class="auth-header">
+                <h3><i class="fas fa-door-open"></i> Welcome Back</h3>
+                <p>Sign in to continue your sacred journey</p>
+                <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.2); width: 36px; height: 36px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+            </div>
+            <div class="auth-body">
+                <form id="login-form">
+                    <div class="auth-input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="login-email" class="auth-input" placeholder=" " required>
+                        <label class="auth-label">Email or Phone</label>
+                    </div>
+                    <div class="auth-input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" class="auth-input" placeholder=" " required>
+                        <label class="auth-label">Password</label>
+                    </div>
+                    <div class="auth-footer">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="remember-me" style="width: auto;">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-full" style="padding: 1rem; font-weight: 700; border-radius: 16px;">Sign In</button>
+                    <div class="auth-divider"><span>or</span></div>
+                    <div class="auth-toggle">
+                        Don't have an account? <a href="#" id="switch-to-register">Create one</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="register-modal">
+        <div class="modal-content" style="max-width: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(13, 59, 42, 0.25);">
+            <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 2.2rem; text-align: center; color: white; position: relative;">
+                <h3 style="font-family: 'Amiri', serif; font-size: 1.8rem; margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
+                    <i class="fas fa-user-plus" style="color: var(--secondary);"></i> Create Your Account
+                </h3>
+                <p style="margin-top: 0.4rem; opacity: 0.9; font-size: 0.95rem;">Join thousands of pilgrims on their sacred journey</p>
+                <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.15); width: 34px; height: 34px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+            </div>
+            <div style="padding: 2.4rem;">
+                <form id="register-form">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="text" id="reg-name" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-name" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Full Name (as in Passport)</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="email" id="reg-email" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-email" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Email Address</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-phone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="tel" id="reg-phone" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-phone" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Phone (+960)</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <select id="reg-travel-type" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
+                                <option value=""></option>
+                                <option value="individual">Myself Only</option>
+                                <option value="family">Family (Spouse & Children)</option>
+                                <option value="group">Group (Friends or Others)</option>
+                            </select>
+                            <label for="reg-travel-type" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Traveling With</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="password" id="reg-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Password</label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.6rem;">
+                        <div style="position: relative;">
+                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
+                            <input type="password" id="reg-confirm-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
+                            <label for="reg-confirm-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Confirm Password</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-full" id="register-submit" style="padding: 1rem; font-weight: 700; font-size: 1.05rem; border-radius: 14px;">Create Account</button>
+                    <div style="text-align: center; margin-top: 1.8rem; font-size: 0.95rem; color: var(--gray);">
+                        Already have an account?  
+                        <a href="#" id="switch-to-login" style="color: var(--secondary); font-weight: 700; text-decoration: none;">Sign in</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="package-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detail-title"><i class="fas fa-kaaba" style="color: var(--secondary);"></i> Package Details</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body package-detail-body" id="package-detail-content"></div>
+            <div style="padding: 0 1.8rem 1.8rem;">
+                <button class="btn btn-full" onclick="openBookingModal()">
+                    <i class="fas fa-calendar-check"></i> Book This Package
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="booking-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-book" style="color: var(--secondary); margin-right: 8px;"></i> Book Your Sacred Journey</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="package-name">Selected Package</label>
+                        <input type="text" id="package-name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-users"></i> Number of Pilgrims</label>
+                        <input type="number" id="passengers" min="1" value="1" required style="width: 100%;">
+                        <small style="color: var(--gray); display: block; margin-top: 0.3rem;">Include yourself and all family/group members.</small>
+                    </div>
+                    <div id="pilgrim-list"></div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Contact Email</label>
+                        <input type="email" id="email" placeholder="e.g., ahmed@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone"><i class="fas fa-phone"></i> Phone (+960)</label>
+                        <input type="tel" id="phone" placeholder="e.g., 771 2345" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-sticky-note"></i> Special Requests</label>
+                        <textarea id="message" rows="3" placeholder="e.g., wheelchair assistance, dietary needs..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-full">Submit Booking Request</button>
+                </form>
+                <div class="booking-slip" id="booking-slip" style="display: none;">
+                    <h4>Your Booking Confirmation</h4>
+                    <div class="info-row">
+                        <span class="info-label">Package:</span>
+                        <span class="info-value" id="slip-package">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pilgrims:</span>
+                        <span class="info-value" id="slip-pilgrims">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Contact:</span>
+                        <span class="info-value" id="slip-contact">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Agency:</span>
+                        <span class="info-value" id="slip-agency">-</span>
+                    </div>
+                    <div class="total">
+                        Your booking has been successfully submitted. The agency will contact you within 24 hours.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="inquiry-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-comments" style="color: var(--secondary); margin-right: 8px;"></i> Send Inquiry</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="inquiry-form">
+                    <input type="hidden" id="inquiry-agency-name">
+                    <input type="hidden" id="inquiry-agency-phone">
+                    <div class="form-group">
+                        <label for="inq-full-name"><i class="fas fa-user"></i> Your Full Name</label>
+                        <input type="text" id="inq-full-name" placeholder="e.g., Ahmed Naseer" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inq-email"><i class="fas fa-envelope"></i> Email (Optional)</label>
+                        <input type="email" id="inq-email" placeholder="e.g., ahmed@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="inq-phone"><i class="fas fa-phone"></i> Phone (+960)</label>
+                        <input type="tel" id="inq-phone" placeholder="e.g., 771 2345" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inq-message"><i class="fas fa-comment"></i> Your Message</label>
+                        <textarea id="inq-message" rows="3" placeholder="Please share your inquiry about Umrah/Hajj packages..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-full">Send via WhatsApp & Telegram</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // === SUPERBASE CONFIGURATION ===
+        // Replace these with your actual Supabase project details
         const SUPABASE_URL = 'https://bkgagnttyqgtnxamvhcx.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';
         
         // Initialize Supabase client
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // === CORRECTED IMAGE NAMES (no dots!) ===
-        const umrahGroups = [
+        // === DATA MANAGEMENT ===
+        let umrahGroups = [];
+        let hajjGroups = [];
+        let agencies = [];
+        let currentPackage = null;
+
+        // === LOCAL DATA AS FALLBACK ===
+        const localUmrahGroups = [
             {
                 id: 1,
                 title: "MHCL - Standard Umrah",
@@ -1001,7 +1215,7 @@
             }
         ];
 
-        const hajjGroups = [
+        const localHajjGroups = [
             {
                 id: 101,
                 title: "MHCL - Hajj Standard 2025",
@@ -1028,7 +1242,7 @@
             }
         ];
 
-        const agencies = [
+        const localAgencies = [
             { id: 1, name: "Maldives Hajj Corporation Limited (MHCL)", contact: "+960 796 1012, Hotline: 1435", phone: "9607961012", type: "mhcl" },
             { id: 2, name: "Acro Pvt Ltd", contact: "+960 778 4578", phone: "9607784578", type: "other" },
             { id: 3, name: "Qibla Hajj & Umrah", contact: "+960 966 6104", phone: "9609666104", type: "other" },
@@ -1041,9 +1255,91 @@
             { id: 10, name: "Tazkiyah Pvt Ltd", contact: "+960 777 9471", phone: "9607779471", type: "tazkiyah" },
         ];
 
-        let currentPackage = null;
-
         // === SUPERBASE FUNCTIONS ===
+        async function loadPackagesFromSupabase() {
+            try {
+                console.log('Loading data from Supabase...');
+                
+                // Load Umrah packages
+                const { data: umrahData, error: umrahError } = await supabase
+                    .from('packages')
+                    .select('*')
+                    .eq('package_type', 'umrah')
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+
+                if (umrahError) throw umrahError;
+                
+                umrahGroups = umrahData.map(pkg => ({
+                    id: pkg.id,
+                    title: pkg.title,
+                    agent: pkg.agent,
+                    price: pkg.price_range,
+                    departure: pkg.departure_info,
+                    duration: pkg.duration,
+                    image: pkg.image_url,
+                    description: pkg.description,
+                    features: pkg.features || [],
+                    type: pkg.category
+                }));
+
+                // Load Hajj packages
+                const { data: hajjData, error: hajjError } = await supabase
+                    .from('packages')
+                    .select('*')
+                    .eq('package_type', 'hajj')
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+
+                if (hajjError) throw hajjError;
+                
+                hajjGroups = hajjData.map(pkg => ({
+                    id: pkg.id,
+                    title: pkg.title,
+                    agent: pkg.agent,
+                    price: pkg.price_range,
+                    departure: pkg.departure_info,
+                    duration: pkg.duration,
+                    image: pkg.image_url,
+                    description: pkg.description,
+                    features: pkg.features || [],
+                    type: pkg.category
+                }));
+
+                // Load agencies
+                const { data: agenciesData, error: agenciesError } = await supabase
+                    .from('agencies')
+                    .select('*')
+                    .eq('is_approved', true)
+                    .order('name');
+
+                if (agenciesError) throw agenciesError;
+                
+                agencies = agenciesData.map(agency => ({
+                    id: agency.id,
+                    name: agency.name,
+                    contact: agency.contact_info,
+                    phone: agency.phone,
+                    type: agency.agency_type
+                }));
+
+                console.log('Data loaded successfully from Supabase');
+                return true;
+            } catch (error) {
+                console.error('Error loading data from Supabase:', error);
+                // Fallback to local data
+                loadLocalData();
+                return false;
+            }
+        }
+
+        function loadLocalData() {
+            console.log('Using local data as fallback');
+            umrahGroups = [...localUmrahGroups];
+            hajjGroups = [...localHajjGroups];
+            agencies = [...localAgencies];
+        }
+
         async function saveUserToSupabase(userData) {
             try {
                 const { data, error } = await supabase
@@ -1079,6 +1375,7 @@
                             user_phone: bookingData.userPhone,
                             passengers: bookingData.passengers,
                             pilgrim_names: bookingData.pilgrimNames,
+                            pilgrim_dobs: bookingData.pilgrimDOBs,
                             special_requests: bookingData.specialRequests,
                             status: 'pending',
                             created_at: new Date().toISOString()
@@ -1120,22 +1417,6 @@
             }
         }
 
-        async function getUserBookings(email) {
-            try {
-                const { data, error } = await supabase
-                    .from('bookings')
-                    .select('*')
-                    .eq('user_email', email)
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-                return data;
-            } catch (error) {
-                console.error('Error fetching user bookings:', error);
-                return [];
-            }
-        }
-
         // === AUTH STATE ===
         function updateAuthUI() {
             const isLoggedIn = localStorage.getItem('goumrah_user');
@@ -1152,8 +1433,8 @@
 
         async function login(email, password) {
             try {
-                // For demo purposes, we'll use simple auth
-                // In production, you would use Supabase Auth
+                // For demo purposes, using simple auth
+                // In production, use Supabase Auth
                 const userData = {
                     email: email,
                     name: email.split('@')[0],
@@ -1207,9 +1488,11 @@
             alert('👋 You have been logged out.');
         }
 
-        // === DISPLAY ===
+        // === DISPLAY FUNCTIONS ===
         function displayGroups(groups, containerId) {
             const container = document.getElementById(containerId);
+            if (!container) return;
+            
             container.innerHTML = '';
             groups.forEach(group => {
                 const card = document.createElement('div');
@@ -1247,6 +1530,7 @@
                 container.appendChild(card);
             });
 
+            // Add event listeners
             document.querySelectorAll('.book-now').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const g = groups.find(x => x.id == btn.dataset.id);
@@ -1352,6 +1636,8 @@
 
         function displayAgencies(list) {
             const container = document.getElementById('agencies-container');
+            if (!container) return;
+            
             container.innerHTML = '';
             list.forEach(a => {
                 const card = document.createElement('div');
@@ -1432,7 +1718,7 @@
             displayAgencies(agencies);
         }
 
-        // === MODALS ===
+        // === MODAL FUNCTIONS ===
         function showLoginModal() {
             document.getElementById('login-modal').style.display = 'block';
         }
@@ -1455,32 +1741,11 @@
             showLoginModal();
         }
 
-        // === OTP UTILS ===
-        function moveToNext(current, nextIndex) {
-            if (current.value.length === 1 && nextIndex <= 4) {
-                document.getElementById(`otp${nextIndex}`).focus();
-            }
-        }
-
-        function moveToPrev(current, prevIndex) {
-            if (current.value.length === 0 && prevIndex >= 1) {
-                document.getElementById(`otp${prevIndex}`).focus();
-            }
-        }
-
-        function generateOTP() {
-            return Math.floor(1000 + Math.random() * 9000).toString();
-        }
-
-        function sendOTP(method, value) {
-            const otp = generateOTP();
-            console.log(`OTP ${otp} sent to ${method}: ${value}`);
-            alert(`✅ OTP sent to your ${method}. Please check and enter below.`);
-            return otp;
-        }
-
         // === INIT ===
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load data from Supabase
+            await loadPackagesFromSupabase();
+            
             updateAuthUI();
             displayGroups(umrahGroups, 'umrah-container');
             displayGroups(hajjGroups, 'hajj-container');
@@ -1535,12 +1800,6 @@
                 };
 
                 await register(userData);
-            });
-
-            document.getElementById('resend-otp').addEventListener('click', () => {
-                const method = document.querySelector('input[name="verify-method"]:checked').value;
-                const value = method === 'email' ? document.getElementById('reg-email').value : document.getElementById('reg-phone').value;
-                sendOTP(method, value);
             });
 
             // Booking form
@@ -1686,219 +1945,5 @@
             });
         });
     </script>
-
-    <!-- Login Modal -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content auth-card">
-            <div class="auth-header">
-                <h3><i class="fas fa-door-open"></i> Welcome Back</h3>
-                <p>Sign in to continue your sacred journey</p>
-                <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.2); width: 36px; height: 36px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
-            </div>
-            <div class="auth-body">
-                <form id="login-form">
-                    <div class="auth-input-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" id="login-email" class="auth-input" placeholder=" " required>
-                        <label class="auth-label">Email or Phone</label>
-                    </div>
-                    <div class="auth-input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" class="auth-input" placeholder=" " required>
-                        <label class="auth-label">Password</label>
-                    </div>
-                    <div class="auth-footer">
-                        <label style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="checkbox" id="remember-me" style="width: auto;">
-                            <span>Remember me</span>
-                        </label>
-                        <a href="#">Forgot password?</a>
-                    </div>
-                    <button type="submit" class="btn btn-full" style="padding: 1rem; font-weight: 700; border-radius: 16px;">Sign In</button>
-                    <div class="auth-divider"><span>or</span></div>
-                    <div class="auth-toggle">
-                        Don't have an account? <a href="#" id="switch-to-register">Create one</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div class="modal" id="register-modal">
-        <div class="modal-content" style="max-width: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(13, 59, 42, 0.25);">
-            <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 2.2rem; text-align: center; color: white; position: relative;">
-                <h3 style="font-family: 'Amiri', serif; font-size: 1.8rem; margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
-                    <i class="fas fa-user-plus" style="color: var(--secondary);"></i> Create Your Account
-                </h3>
-                <p style="margin-top: 0.4rem; opacity: 0.9; font-size: 0.95rem;">Join thousands of pilgrims on their sacred journey</p>
-                <button class="close-modal" style="position: absolute; top: 1.3rem; right: 1.3rem; background: rgba(255,255,255,0.15); width: 34px; height: 34px; border-radius: 50%; color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
-            </div>
-            <div style="padding: 2.4rem;">
-                <form id="register-form">
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <input type="text" id="reg-name" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                            <label for="reg-name" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Full Name (as in Passport)</label>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <input type="email" id="reg-email" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                            <label for="reg-email" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Email Address</label>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-phone" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <input type="tel" id="reg-phone" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                            <label for="reg-phone" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Phone (+960)</label>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <select id="reg-travel-type" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
-                                <option value=""></option>
-                                <option value="individual">Myself Only</option>
-                                <option value="family">Family (Spouse & Children)</option>
-                                <option value="group">Group (Friends or Others)</option>
-                            </select>
-                            <label for="reg-travel-type" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Traveling With</label>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <input type="password" id="reg-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                            <label for="reg-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Password</label>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 1.6rem;">
-                        <div style="position: relative;">
-                            <i class="fas fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <input type="password" id="reg-confirm-password" placeholder=" " style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: #fafafa; transition: all 0.3s;" required>
-                            <label for="reg-confirm-password" style="position: absolute; left: 48px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; transition: 0.3s; font-size: 0.95rem;">Confirm Password</label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-full" id="register-submit" style="padding: 1rem; font-weight: 700; font-size: 1.05rem; border-radius: 14px;">Create Account</button>
-                    <div style="text-align: center; margin-top: 1.8rem; font-size: 0.95rem; color: var(--gray);">
-                        Already have an account?  
-                        <a href="#" id="switch-to-login" style="color: var(--secondary); font-weight: 700; text-decoration: none;">Sign in</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Package Detail Modal -->
-    <div class="modal" id="package-detail-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="detail-title"><i class="fas fa-kaaba" style="color: var(--secondary);"></i> Package Details</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body package-detail-body" id="package-detail-content"></div>
-            <div style="padding: 0 1.8rem 1.8rem;">
-                <button class="btn btn-full" onclick="openBookingModal()">
-                    <i class="fas fa-calendar-check"></i> Book This Package
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div class="modal" id="booking-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-book" style="color: var(--secondary); margin-right: 8px;"></i> Book Your Sacred Journey</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="booking-form">
-                    <div class="form-group">
-                        <label for="package-name">Selected Package</label>
-                        <input type="text" id="package-name" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-users"></i> Number of Pilgrims</label>
-                        <input type="number" id="passengers" min="1" value="1" required style="width: 100%;">
-                        <small style="color: var(--gray); display: block; margin-top: 0.3rem;">Include yourself and all family/group members.</small>
-                    </div>
-                    <div id="pilgrim-list"></div>
-                    <div class="form-group">
-                        <label for="email"><i class="fas fa-envelope"></i> Contact Email</label>
-                        <input type="email" id="email" placeholder="e.g., ahmed@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone"><i class="fas fa-phone"></i> Phone (+960)</label>
-                        <input type="tel" id="phone" placeholder="e.g., 771 2345" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message"><i class="fas fa-sticky-note"></i> Special Requests</label>
-                        <textarea id="message" rows="3" placeholder="e.g., wheelchair assistance, dietary needs..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-full">Submit Booking Request</button>
-                </form>
-                <div class="booking-slip" id="booking-slip" style="display: none;">
-                    <h4>Your Booking Confirmation</h4>
-                    <div class="info-row">
-                        <span class="info-label">Package:</span>
-                        <span class="info-value" id="slip-package">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Pilgrims:</span>
-                        <span class="info-value" id="slip-pilgrims">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Contact:</span>
-                        <span class="info-value" id="slip-contact">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Agency:</span>
-                        <span class="info-value" id="slip-agency">-</span>
-                    </div>
-                    <div class="total">
-                        Your booking has been successfully submitted. The agency will contact you within 24 hours.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Inquiry Modal -->
-    <div class="modal" id="inquiry-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-comments" style="color: var(--secondary); margin-right: 8px;"></i> Send Inquiry</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="inquiry-form">
-                    <input type="hidden" id="inquiry-agency-name">
-                    <input type="hidden" id="inquiry-agency-phone">
-                    <div class="form-group">
-                        <label for="inq-full-name"><i class="fas fa-user"></i> Your Full Name</label>
-                        <input type="text" id="inq-full-name" placeholder="e.g., Ahmed Naseer" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inq-email"><i class="fas fa-envelope"></i> Email (Optional)</label>
-                        <input type="email" id="inq-email" placeholder="e.g., ahmed@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="inq-phone"><i class="fas fa-phone"></i> Phone (+960)</label>
-                        <input type="tel" id="inq-phone" placeholder="e.g., 771 2345" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inq-message"><i class="fas fa-comment"></i> Your Message</label>
-                        <textarea id="inq-message" rows="3" placeholder="Please share your inquiry about Umrah/Hajj packages..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-full">Send via WhatsApp & Telegram</button>
-                </form>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
