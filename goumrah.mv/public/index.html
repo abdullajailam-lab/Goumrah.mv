@@ -1433,11 +1433,10 @@
             try {
                 // For demo purposes, using simple auth
                 // In production, use Supabase Auth
-                const userData = {
-                    email: email,
-                    name: email.split('@')[0],
-                    id: Date.now()
-                };
+                const { data, error } = await supabase.auth.signInWithPassword({
+  email: email,
+  password: password
+});
                 
                 localStorage.setItem('goumrah_user', JSON.stringify(userData));
                 updateAuthUI();
@@ -1453,33 +1452,56 @@
         }
 
         async function register(userData) {
-            try {
-                // Save user to Supabase
-                const supabaseResult = await saveUserToSupabase(userData);
-                
-                if (supabaseResult) {
-                    const user = {
-                        email: userData.email,
-                        name: userData.name,
-                        id: supabaseResult[0]?.id || Date.now()
-                    };
-                    
-                    localStorage.setItem('goumrah_user', JSON.stringify(user));
-                    updateAuthUI();
-                    hideAllModals();
-                    alert('✅ Registration successful! Welcome to GoUmrah.mv');
-                    
-                    return true;
-                } else {
-                    throw new Error('Failed to save user data');
-                }
-            } catch (error) {
-                console.error('Registration error:', error);
-                alert('❌ Registration failed. Please try again.');
-                return false;
-            }
-        }
+  // 1. Register the user in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.signUp({
+    email: userData.email,
+    password: userData.password,
+    options: {
+      data: {
+        full_name: userData.name,
+        phone: userData.phone,
+        travel_type: userData.travelType
+      }
+    }
+  });
 
+  if (authError) {
+    console.error('Auth registration error:', authError);
+    alert('❌ Registration failed: ' + (authError.message || 'Unknown error'));
+    return false;
+  }
+
+  if (!authData.user) {
+    alert('✅ Please check your email to confirm your account.');
+    return true;
+  }
+
+  // Optional: If you still want to store in a separate `users` table (not needed if using auth.user metadata)
+  // Only do this if you have a good reason (e.g., complex profile data)
+  /*
+  const { error: dbError } = await supabase
+    .from('users')
+    .insert({
+      id: authData.user.id,
+      email: userData.email,
+      full_name: userData.name,
+      phone: userData.phone,
+      travel_type: userData.travelType
+    });
+  */
+
+  // Save to localStorage (for UI only)
+  localStorage.setItem('goumrah_user', JSON.stringify({
+    id: authData.user.id,
+    email: userData.email,
+    name: userData.name
+  }));
+
+  updateAuthUI();
+  hideAllModals();
+  alert('✅ Registration started! Please check your email for confirmation.');
+  return true;
+}
         function logout() {
             localStorage.removeItem('goumrah_user');
             updateAuthUI();
@@ -1945,5 +1967,6 @@
     </script>
 </body>
 </html>
+
 
 
