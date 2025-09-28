@@ -1,99 +1,454 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Umrah Admin - DEBUG MODE</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Umrah Package Manager</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
-    input, button { width: 100%; padding: 0.75rem; margin: 0.5rem 0; }
-    button { background: #3b82f6; color: white; border: none; cursor: pointer; }
-    .error { color: red; background: #fee; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
-    .success { color: green; background: #efe; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
-    .debug { background: #f0f0f0; padding: 1rem; margin: 1rem 0; border-radius: 4px; font-family: monospace; }
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #f59e0b;
+      --light: #f8fafc;
+      --dark: #0f172a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+      margin-bottom: 2rem;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .hidden { display: none; }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      padding: 0.75rem 1.5rem;
+    }
+    button:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #64748b;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    .btn-success {
+      background: #10b981;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+    .package-item {
+      border-left: 4px solid var(--secondary);
+      margin-bottom: 1.5rem;
+    }
+    .package-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .package-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .status-active {
+      background: #dcfce7;
+      color: #166534;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .status-inactive {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .error { color: #ef4444; margin-top: 0.5rem; }
+    .success { color: #10b981; margin-top: 0.5rem; }
+    .image-preview {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 1rem 0;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <h1>Umrah Admin Login - DEBUG MODE</h1>
-  
-  <div class="debug">
-    <strong>🔧 DEBUG INFO:</strong><br>
-    - Open browser DevTools (F12) → Console tab<br>
-    - Check for red error messages<br>
-    - Make sure you're using http:// not file://
+  <header>
+    <div class="container">
+      <h1><i class="fas fa-kaaba"></i> Umrah Package Manager</h1>
+      <p>Manage your Umrah packages securely</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Login Section -->
+    <div id="login-section">
+      <div class="card">
+        <h2><i class="fas fa-sign-in-alt"></i> Agency Login</h2>
+        <div style="margin: 1rem 0;">
+          <input type="email" id="email" placeholder="Agency Email" required />
+        </div>
+        <div style="margin: 1rem 0;">
+          <input type="password" id="password" placeholder="Password" required />
+        </div>
+        <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <p id="login-error" class="error"></p>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2><i class="fas fa-briefcase"></i> Your Umrah Packages</h2>
+        <button onclick="logout()" class="btn-secondary">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Add New Package</h3>
+        <form id="package-form" onsubmit="addPackage(event)">
+          <div class="form-grid">
+            <div>
+              <label>Package Name *</label>
+              <input type="text" id="form-name" placeholder="e.g., Premium Umrah 10 Days" required />
+            </div>
+            <div>
+              <label>Price (SAR) *</label>
+              <input type="number" id="form-price" placeholder="15000" min="0" required />
+            </div>
+            <div>
+              <label>Duration (Days) *</label>
+              <input type="number" id="form-duration" placeholder="10" min="1" required />
+            </div>
+            <div>
+              <label>Departure Date *</label>
+              <input type="date" id="form-departure" required />
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div>
+              <label>Hotel in Makkah</label>
+              <input type="text" id="form-hotel-makkah" placeholder="Makkah Hilton" />
+            </div>
+            <div>
+              <label>Hotel in Madinah</label>
+              <input type="text" id="form-hotel-madinah" placeholder="Madinah Pullman" />
+            </div>
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <label>Package Description</label>
+            <textarea id="form-description" rows="4" placeholder="Include details about flights, services, etc."></textarea>
+          </div>
+
+          <div style="margin: 1rem 0;">
+            <label>Package Image</label>
+            <input type="file" id="form-image" accept="image/*" />
+            <img id="image-preview" class="image-preview hidden" />
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="checkbox" id="form-meals" checked /> Meals Included
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="checkbox" id="form-visa" checked /> Visa Included
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="checkbox" id="form-active" checked /> Active Package
+            </label>
+          </div>
+
+          <button type="submit" style="margin-top: 1rem;">
+            <i class="fas fa-save"></i> Add Package
+          </button>
+        </form>
+      </div>
+
+      <div id="packages-container"></div>
+    </div>
   </div>
 
-  <input type="email" id="email" placeholder="Email" value="agency@test.com">
-  <input type="password" id="password" placeholder="Password" value="Password123!">
-  <button onclick="login()">Login</button>
-  
-  <div id="status"></div>
-
   <script>
-    // 👇 REPLACE THESE WITH YOUR ACTUAL SUPABASE CREDENTIALS!
-    const SUPABASE_URL = 'https://bkgagnttyqgtnxamvhcx.supabase.co'; // ← CHANGE THIS
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';          // ← CHANGE THIS
+    // 👇 REPLACE WITH YOUR SUPABASE INFO
+    const supabase = supabase.createClient(
+      'https://bkgagnttyqgtnxamvhcx.supabase.co', // ← Your Supabase URL
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ'                     // ← Your anon public key
+    );
 
-    console.log('🔧 Initializing Supabase...');
-    console.log('URL:', SUPABASE_URL);
-    console.log('Key length:', SUPABASE_ANON_KEY.length);
+    // DOM Elements
+    const loginSection = document.getElementById('login-section');
+    const dashboard = document.getElementById('dashboard');
+    const packagesContainer = document.getElementById('packages-container');
+    const loginError = document.getElementById('login-error');
+    const imageInput = document.getElementById('form-image');
+    const imagePreview = document.getElementById('image-preview');
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Image preview
+    imageInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imagePreview.src = e.target.result;
+          imagePreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+
+    // Check session on load
+    async function checkSession() {
+      const {  { session } } = await supabase.auth.getSession();
+      if (session) {
+        showDashboard();
+        loadPackages();
+      }
+    }
 
     async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const statusDiv = document.getElementById('status');
-
-      // Clear previous messages
-      statusDiv.innerHTML = '';
-
-      console.log('📧 Attempting login with email:', email);
-
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ 
-          email, 
-          password 
-        });
-
-        if (error) {
-          console.error('❌ Login ERROR:', error);
-          statusDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
-          statusDiv.innerHTML += `<div class="debug">Error details: ${JSON.stringify(error, null, 2)}</div>`;
-        } else {
-          console.log('✅ Login SUCCESS:', data);
-          statusDiv.innerHTML = `<div class="success">✅ Login successful!<br>User ID: ${data.user.id}</div>`;
-          statusDiv.innerHTML += `<div class="debug">Full response: ${JSON.stringify(data, null, 2)}</div>`;
-          
-          // Test: Try to fetch session
-          const {  sessionData } = await supabase.auth.getSession();
-          console.log('🔑 Session ', sessionData);
-        }
-      } catch (err) {
-        console.error('💥 Unexpected error:', err);
-        statusDiv.innerHTML = `<div class="error">💥 Unexpected error: ${err.message}</div>`;
-      }
-    }
-
-    // Check if already logged in
-    async function checkSession() {
-      console.log('🔍 Checking existing session...');
-      const { data: { session }, error } = await supabase.auth.getSession();
       
-      if (error) {
-        console.error('Session check error:', error);
+      if (!email || !password) {
+        loginError.textContent = 'Please enter email and password';
         return;
       }
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
-      if (session) {
-        console.log('✅ Already logged in:', session.user.email);
-        document.getElementById('status').innerHTML = 
-          `<div class="success">✅ Already logged in as: ${session.user.email}</div>`;
+      if (error) {
+        loginError.textContent = error.message;
       } else {
-        console.log('ℹ️ No active session');
+        loginError.textContent = '';
+        showDashboard();
+        loadPackages();
       }
     }
 
-    // Run on page load
+    function logout() {
+      supabase.auth.signOut();
+      dashboard.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showDashboard() {
+      loginSection.classList.add('hidden');
+      dashboard.classList.remove('hidden');
+    }
+
+    async function loadPackages() {
+      const {  { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('umrah_packages')
+        .select('*')
+        .eq('business_id', user.id)
+        .order('departure_date', { ascending: true });
+
+      if (error) {
+        console.error('Error loading packages:', error);
+        return;
+      }
+
+      packagesContainer.innerHTML = data.length ? '<h3>Your Packages</h3>' : '<p>No packages yet. Add your first Umrah package!</p>';
+      
+      data.forEach(pkg => {
+        const isActive = pkg.is_active ? 
+          '<span class="status-active">Active</span>' : 
+          '<span class="status-inactive">Inactive</span>';
+        
+        const imageUrl = pkg.image_url ? 
+          (pkg.image_url.startsWith('http') ? pkg.image_url : `https://your-project.supabase.co/storage/v1/object/public/umrah-package-images/${pkg.image_url}`) : 
+          'https://placehold.co/600x400/e2e8f0/64748b?text=No+Image';
+        
+        const pkgDiv = document.createElement('div');
+        pkgDiv.className = 'card package-item';
+        pkgDiv.innerHTML = `
+          <div class="package-header">
+            <h3>${pkg.name}</h3>
+            ${isActive}
+          </div>
+          <p><strong>Price:</strong> SAR ${pkg.price.toLocaleString()}</p>
+          <p><strong>Duration:</strong> ${pkg.duration_days} days</p>
+          <p><strong>Departure:</strong> ${new Date(pkg.departure_date).toLocaleDateString()}</p>
+          <p><strong>Makkah Hotel:</strong> ${pkg.hotel_makkah || 'Not specified'}</p>
+          <p><strong>Madinah Hotel:</strong> ${pkg.hotel_madinah || 'Not specified'}</p>
+          <p><strong>Meals:</strong> ${pkg.meals_included ? '✅ Included' : '❌ Not included'}</p>
+          <p><strong>Visa:</strong> ${pkg.visa_included ? '✅ Included' : '❌ Not included'}</p>
+          ${pkg.description ? `<p><strong>Description:</strong> ${pkg.description}</p>` : ''}
+          <img src="${imageUrl}" alt="${pkg.name}" class="package-image" onerror="this.src='https://placehold.co/600x400/e2e8f0/64748b?text=Image+Error'">
+          
+          <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button onclick="editPackage('${pkg.id}')" class="btn-secondary">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button onclick="deletePackage('${pkg.id}')" class="btn-secondary">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+            <button onclick="toggleActive('${pkg.id}', ${pkg.is_active})" class="${pkg.is_active ? 'btn-secondary' : 'btn-success'}">
+              <i class="fas fa-${pkg.is_active ? 'times' : 'check'}"></i> ${pkg.is_active ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        `;
+        packagesContainer.appendChild(pkgDiv);
+      });
+    }
+
+    async function addPackage(e) {
+      e.preventDefault();
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Get form values
+      const name = document.getElementById('form-name').value;
+      const price = parseFloat(document.getElementById('form-price').value);
+      const duration = parseInt(document.getElementById('form-duration').value);
+      const departure = document.getElementById('form-departure').value;
+      const hotelMakkah = document.getElementById('form-hotel-makkah').value || null;
+      const hotelMadinah = document.getElementById('form-hotel-madinah').value || null;
+      const description = document.getElementById('form-description').value || null;
+      const meals = document.getElementById('form-meals').checked;
+      const visa = document.getElementById('form-visa').checked;
+      const active = document.getElementById('form-active').checked;
+      
+      let imageUrl = null;
+      
+      // Handle image upload
+      const imageFile = document.getElementById('form-image').files[0];
+      if (imageFile) {
+        const fileName = `${user.id}/${Date.now()}_${imageFile.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from('umrah-package-images')
+          .upload(fileName, imageFile, { upsert: true });
+        
+        if (uploadError) {
+          alert('Image upload failed: ' + uploadError.message);
+          return;
+        }
+        imageUrl = fileName;
+      }
+
+      // Insert package
+      const { error } = await supabase
+        .from('umrah_packages')
+        .insert({
+          business_id: user.id,
+          name,
+          price,
+          duration_days: duration,
+          departure_date: departure,
+          hotel_makkah: hotelMakkah,
+          hotel_madinah: hotelMadinah,
+          description,
+          image_url: imageUrl,
+          meals_included: meals,
+          visa_included: visa,
+          is_active: active
+        });
+
+      if (error) {
+        alert('Error adding package: ' + error.message);
+      } else {
+        alert('Package added successfully!');
+        document.getElementById('package-form').reset();
+        imagePreview.classList.add('hidden');
+        loadPackages();
+      }
+    }
+
+    async function deletePackage(id) {
+      if (!confirm('Are you sure you want to delete this Umrah package?')) return;
+      
+      const { error } = await supabase
+        .from('umrah_packages')
+        .delete()
+        .eq('id', id);
+
+      if (!error) {
+        alert('Package deleted!');
+        loadPackages();
+      }
+    }
+
+    async function toggleActive(id, currentActive) {
+      const newActive = !currentActive;
+      const { error } = await supabase
+        .from('umrah_packages')
+        .update({ is_active: newActive })
+        .eq('id', id);
+
+      if (!error) {
+        loadPackages();
+      }
+    }
+
+    // Initialize
     checkSession();
   </script>
 </body>
