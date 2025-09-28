@@ -1108,34 +1108,44 @@
 
         // === NEW: LOAD UMRah PACKAGES WITH AGENCY NAMES ===
         async function loadUmrahPackagesFromSupabase() {
-            try {
-                console.log('Loading Umrah packages from Supabase...');
-                const { data: packages, error: pkgError } = await supabase
-                    .from('umrah_packages')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('departure_date', { ascending: true });
+    try {
+        const { data, error } = await supabase
+            .from('umrah_packages')
+            .select('*')
+            .eq('is_active', true)
+            .order('departure_date', { ascending: true });
+        if (error) throw error;
 
-                if (pkgError) throw pkgError;
+        umrahGroups = data.map(pkg => ({
+            id: pkg.id,
+            title: pkg.name,
+            // ✅ Use agency_name if available, else fallback to business_id or "Unknown"
+            agent: pkg.agency_name 
+                || (pkg.business_id ? `Agency ID: ${pkg.business_id.substring(0, 8)}...` : 'Unknown Agency'),
+            price: `MVR ${parseFloat(pkg.price).toLocaleString()}`,
+            departure: new Date(pkg.departure_date).toLocaleDateString('en-GB'),
+            duration: `${pkg.duration_days} Days`,
+            image: pkg.image_url 
+                ? (pkg.image_url.startsWith('http') 
+                    ? pkg.image_url 
+                    : `${SUPABASE_URL}/storage/v1/object/public/umrah-package-images/${pkg.image_url}`)
+                : 'https://placehold.co/600x400/e2e8f0/64748b?text=No+Image',
+            description: pkg.description || 'No description available.',
+            features: [
+                pkg.meals_included ? 'Meals Included' : 'Meals Not Included',
+                pkg.visa_included ? 'Visa Included' : 'Visa Not Included',
+                `Duration: ${pkg.duration_days} days`,
+                `Departure: ${new Date(pkg.departure_date).toLocaleDateString()}`
+            ].filter(Boolean),
+            type: 'standard'
+        }));
 
-                // Extract unique business_ids
-                const businessIds = [...new Set(packages.map(p => p.business_id).filter(id => id))];
-
-                // Fetch agency names in bulk
-                let agencyMap = {};
-                if (businessIds.length > 0) {
-                    const { data: profiles, error: profileError } = await supabase
-                        .from('business_profiles')
-                        .select('id, business_name')
-                        .in('id', businessIds);
-
-                    if (!profileError && profiles) {
-                        agencyMap = profiles.reduce((acc, profile) => {
-                            acc[profile.id] = profile.business_name;
-                            return acc;
-                        }, {});
-                    }
-                }
+        return true;
+    } catch (error) {
+        console.error('Error:', error);
+        return false;
+    }
+}
 
                 // Map packages with real agency names
                 umrahGroups = packages.map(pkg => ({
@@ -1245,3 +1255,4 @@
     </script>
 </body>
 </html>
+
