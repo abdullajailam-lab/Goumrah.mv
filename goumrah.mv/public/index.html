@@ -1253,7 +1253,7 @@
                 umrahGroups = data.map(pkg => ({
                     id: pkg.id,
                     title: pkg.name,
-                    agent: pkg.business_id ? 'Agency ID: ' + pkg.business_id : 'Unknown Agency',
+                    agent: pkg.business_id ? 'Agency Name: ' + pkg.business_id : 'Unknown Agency',
                     price: `MVR ${parseFloat(pkg.price).toLocaleString()}`,
                     departure: new Date(pkg.departure_date).toLocaleDateString('en-GB'),
                     duration: `${pkg.duration_days} Days`,
@@ -1915,4 +1915,5 @@
     </script>
 </body>
 </html>
+
 
