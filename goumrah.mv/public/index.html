@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -954,7 +953,7 @@
                     <div class="form-group" style="margin-bottom: 1.5rem;">
                         <div style="position: relative;">
                             <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <select id="reg-travel-type" class="auth-input" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
+                            <select id="reg-travel-type" class="auth-input" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
                                 <option value=""></option>
                                 <option value="individual">Myself Only</option>
                                 <option value="family">Family (Spouse & Children)</option>
@@ -1101,7 +1100,7 @@
         let agencies = [];
         let currentPackage = null;
 
-        // === LOCAL FALLBACK DATA ===
+        // === LOCAL DATA ===
         const localUmrahGroups = [
             { id: 1, title: "MHCL - Standard Umrah", agent: "Maldives Hajj Corporation Limited (MHCL)", price: "MVR 21,965 – 22,965", departure: "Multiple dates", duration: "10 Days", image: "img6.jpg", description: "Basic Umrah package...", features: ["Visa Included", "Basic Hotel", "Guided Tawaf", "Group Transport"], type: "standard" },
             { id: 2, title: "MHCL - 15-Day Umrah", agent: "MHCL", price: "MVR 41,965", departure: "Multiple dates", duration: "15 Days", image: "img7.jpg", description: "Extended Umrah journey...", features: ["Extended Stay", "Ziyarat Tours", "Meals Included", "Near Haram"], type: "standard" },
@@ -1129,7 +1128,7 @@
             { id: 10, name: "Tazkiyah Pvt Ltd", contact: "+960 777 9471", phone: "9607779471", type: "tazkiyah" },
         ];
 
-        // === LOAD FROM SUPABASE ===
+        // === LOAD DATA FROM SUPABASE ===
         async function loadUmrahPackagesFromSupabase() {
             try {
                 const { data, error } = await supabase
@@ -1170,7 +1169,7 @@
                 const umrahLoaded = await loadUmrahPackagesFromSupabase();
                 if (!umrahLoaded) umrahGroups = [...localUmrahGroups];
 
-                const {  hajjData, error: hajjError } = await supabase
+                const { data: hajjData, error: hajjError } = await supabase
                     .from('packages')
                     .select('*')
                     .eq('package_type', 'hajj')
@@ -1221,12 +1220,11 @@
         }
 
         // === AUTH FUNCTIONS ===
-        function updateAuthUI() {
-            supabase.auth.getSession().then(({  { session } }) => {
-                const isLoggedIn = !!session;
-                document.getElementById('auth-buttons').style.display = isLoggedIn ? 'none' : 'flex';
-                document.getElementById('logout-button').style.display = isLoggedIn ? 'flex' : 'none';
-            });
+        async function updateAuthUI() {
+            const { data: { session } } = await supabase.auth.getSession();
+            const isLoggedIn = !!session;
+            document.getElementById('auth-buttons').style.display = isLoggedIn ? 'none' : 'flex';
+            document.getElementById('logout-button').style.display = isLoggedIn ? 'flex' : 'none';
         }
 
         async function login(email, password) {
@@ -1238,7 +1236,7 @@
                 alert('✅ Login successful! Welcome back.');
                 return true;
             } catch (err) {
-                console.error('Login error:', err.message || err);
+                console.error('Login error:', err.message);
                 alert('❌ Login failed: ' + (err.message || 'Invalid email or password.'));
                 return false;
             }
@@ -1267,7 +1265,7 @@
                 }
                 return true;
             } catch (err) {
-                console.error('Register error:', err.message || err);
+                console.error('Register error:', err.message);
                 alert('❌ Registration failed: ' + (err.message || 'Please try again.'));
                 return false;
             }
@@ -1279,7 +1277,7 @@
             alert('👋 You have been logged out.');
         }
 
-        // === BOOKING ===
+        // === BOOKING FUNCTION (REQUIRES AUTH) ===
         async function saveBookingToSupabase(bookingData) {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
@@ -1305,12 +1303,12 @@
                 if (error) throw error;
                 return data;
             } catch (err) {
-                console.error('Booking save error:', err.message || err);
+                console.error('Booking error:', err.message);
                 throw err;
             }
         }
 
-        // === DISPLAY & UI ===
+        // === DISPLAY FUNCTIONS ===
         function displayGroups(groups, containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -1321,22 +1319,12 @@
                 card.innerHTML = `
                     <div class="group-image" style="background-image: url('${group.image}')"></div>
                     <div class="group-content">
-                        <div class="group-header">
-                            <div>
-                                <h3 class="group-title">${group.title}</h3>
-                                <p class="group-agent">By ${group.agent}</p>
-                            </div>
-                            <div class="group-price">${group.price}</div>
-                        </div>
+                        <h3 class="group-title">${group.title}</h3>
+                        <p class="group-agent">By ${group.agent}</p>
+                        <div class="group-price">${group.price}</div>
                         <div class="group-details">
-                            <div class="group-detail">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>${group.departure}</span>
-                            </div>
-                            <div class="group-detail">
-                                <i class="fas fa-clock"></i>
-                                <span>${group.duration}</span>
-                            </div>
+                            <div class="group-detail"><i class="fas fa-calendar-alt"></i> ${group.departure}</div>
+                            <div class="group-detail"><i class="fas fa-clock"></i> ${group.duration}</div>
                         </div>
                         <p class="group-description">${group.description}</p>
                         <div class="group-features">
@@ -1371,52 +1359,17 @@
             });
         }
 
-        function showPackageDetail(packageData) {
-            currentPackage = packageData;
-            const modalContent = document.getElementById('package-detail-content');
-            modalContent.innerHTML = `
-                <div class="package-hero" style="background: linear-gradient(rgba(13,59,42,0.7), rgba(8,42,29,0.8)), url('${packageData.image}'); padding: 1.5rem; color: white; border-radius: 12px; margin-bottom: 1.5rem;">
-                    <h2 style="font-size: 1.8rem; font-family: 'Amiri', serif;">${packageData.title}</h2>
-                    <p style="opacity: 0.9;">By ${packageData.agent}</p>
-                    <div style="font-size: 1.4rem; font-weight: 700; color: var(--secondary);">${packageData.price}</div>
+        function showPackageDetail(pkg) {
+            currentPackage = pkg;
+            document.getElementById('package-detail-content').innerHTML = `
+                <div class="package-hero" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${pkg.image}'); padding: 1.5rem; color: white; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <h2>${pkg.title}</h2>
+                    <p>By ${pkg.agent}</p>
+                    <div style="font-size: 1.4rem; font-weight: 700;">${pkg.price}</div>
                 </div>
-                <div class="detail-section">
-                    <h4><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> Overview</h4>
-                    <p>${packageData.description}</p>
-                </div>
-                <div class="detail-section">
-                    <h4><i class="fas fa-star" style="color: var(--secondary); margin-right: 8px;"></i> Key Features</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem;">
-                        ${packageData.features.map(f => `<span class="feature">${f}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="detail-section" style="background: var(--accent-bg); padding: 1.2rem; border-radius: 10px; margin: 1.2rem 0;">
-                    <h4><i class="fas fa-route" style="color: var(--primary); margin-right: 8px;"></i> Itinerary Highlights</h4>
-                    <ul style="padding-left: 1.4rem; color: var(--gray);">
-                        <li>Arrival in Jeddah / Makkah</li>
-                        <li>Perform Umrah rituals with guidance</li>
-                        <li>Ziyarat in Makkah & Madinah</li>
-                        <li>Comfortable return arrangements</li>
-                    </ul>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0;">
-                    <div style="background: #f8f9f5; padding: 1rem; border-radius: 8px;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-check-circle"></i> Included</h5>
-                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                            <li>Round-trip flights</li>
-                            <li>Hotel near Haram</li>
-                            <li>Visa processing</li>
-                            <li>Meals (as per plan)</li>
-                        </ul>
-                    </div>
-                    <div style="background: #fdf6f0; padding: 1rem; border-radius: 8px;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-exclamation-circle"></i> Notes</h5>
-                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                            <li>50% advance payment</li>
-                            <li>Subject to availability</li>
-                            <li>Children under 2: free</li>
-                        </ul>
-                    </div>
+                <p>${pkg.description}</p>
+                <div class="group-features" style="margin: 1rem 0;">
+                    ${pkg.features.map(f => `<span class="feature">${f}</span>`).join('')}
                 </div>
             `;
             document.getElementById('package-detail-modal').style.display = 'block';
@@ -1435,26 +1388,24 @@
             const container = document.getElementById('pilgrim-list');
             container.innerHTML = '';
             for (let i = 1; i <= count; i++) {
-                const entry = document.createElement('div');
-                entry.className = 'pilgrim-entry';
-                entry.innerHTML = `
+                const div = document.createElement('div');
+                div.innerHTML = `
                     <h4>Pilgrim ${i}${i === 1 ? ' (Primary)' : ''}</h4>
                     <div class="form-group">
-                        <label>Full Name (as in Passport)</label>
-                        <input type="text" name="pilgrim-name-${i}" placeholder="e.g., Ahmed Naseer" required>
+                        <label>Full Name</label>
+                        <input type="text" name="pilgrim-name-${i}" required>
                     </div>
                     <div class="form-group">
                         <label>Date of Birth</label>
-                        <input type="date" name="pilgrim-dob-${i}" required>
+                        <input type="date" name="pilgrim-dob-${i}">
                     </div>
                 `;
-                container.appendChild(entry);
+                container.appendChild(div);
             }
         }
 
         function displayAgencies(list) {
             const container = document.getElementById('agencies-container');
-            if (!container) return;
             container.innerHTML = '';
             list.forEach(a => {
                 const card = document.createElement('div');
@@ -1464,87 +1415,26 @@
                         <div class="agency-icon"><i class="fas fa-mosque"></i></div>
                         <h3 class="agency-name">${a.name}</h3>
                     </div>
-                    <div class="agency-detail">
-                        <i class="fas fa-phone"></i>
-                        <span><strong>Contact:</strong> ${a.contact}</span>
-                    </div>
-                    <button class="btn btn-outline contact-agency" data-id="${a.id}">Contact via WhatsApp</button>
+                    <div class="agency-detail"><i class="fas fa-phone"></i> ${a.contact}</div>
+                    <button class="btn btn-outline contact-agency" data-id="${a.id}">Contact</button>
                 `;
                 container.appendChild(card);
             });
-
             document.querySelectorAll('.contact-agency').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const a = agencies.find(x => x.id == btn.dataset.id);
-                    if (a && a.phone) {
+                    if (a) {
                         document.getElementById('inquiry-agency-name').value = a.name;
                         document.getElementById('inquiry-agency-phone').value = a.phone;
                         document.getElementById('inquiry-modal').style.display = 'block';
-                    } else {
-                        alert(`📞 ${a.name}\nℹ️ Contact details not available.`);
                     }
                 });
             });
         }
 
-        // === FILTERING ===
-        function filterGroups() {
-            const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
-            let list = activeTab === 'umrah' ? [...umrahGroups] : [...hajjGroups];
-            const month = document.getElementById('departure-date').value;
-            const dur = document.getElementById('duration').value;
-            const price = document.getElementById('price-range').value;
-            const pkgType = document.getElementById('package-type').value;
-
-            if (month) {
-                const year = month.split('-')[0];
-                list = list.filter(g => g.departure.includes(year));
-            }
-            if (dur !== 'all') {
-                list = list.filter(g => {
-                    const d = parseInt(g.duration) || 0;
-                    if (dur === '7') return d <= 7;
-                    if (dur === '10') return d > 7 && d <= 10;
-                    if (dur === '14') return d > 10 && d <= 14;
-                    if (dur === '21') return d > 21;
-                    return true;
-                });
-            }
-            if (price !== 'all') {
-                list = list.filter(g => {
-                    const pText = g.price.replace(/[^\d]/g, '');
-                    const p = parseInt(pText.substring(0,5)) || 0;
-                    if (price === 'low') return p < 30000;
-                    if (price === 'medium') return p >= 30000 && p <= 50000;
-                    if (price === 'high') return p > 50000;
-                    return true;
-                });
-            }
-            if (pkgType !== 'all') {
-                list = list.filter(g => g.type === pkgType);
-            }
-
-            if (activeTab === 'umrah') displayGroups(list, 'umrah-container');
-            else displayGroups(list, 'hajj-container');
-        }
-
-        function filterAgencies() {
-            displayAgencies(agencies);
-        }
-
         // === MODAL HELPERS ===
         function hideAllModals() {
             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-        }
-
-        function switchToRegister() {
-            hideAllModals();
-            document.getElementById('register-modal').style.display = 'block';
-        }
-
-        function switchToLogin() {
-            hideAllModals();
-            document.getElementById('login-modal').style.display = 'block';
         }
 
         // === INIT ===
@@ -1564,8 +1454,14 @@
             document.getElementById('login-btn').addEventListener('click', () => document.getElementById('login-modal').style.display = 'block');
             document.getElementById('register-btn').addEventListener('click', () => document.getElementById('register-modal').style.display = 'block');
             document.getElementById('logout-btn').addEventListener('click', logout);
-            document.getElementById('switch-to-register').addEventListener('click', switchToRegister);
-            document.getElementById('switch-to-login').addEventListener('click', switchToLogin);
+            document.getElementById('switch-to-register').addEventListener('click', () => {
+                hideAllModals();
+                document.getElementById('register-modal').style.display = 'block';
+            });
+            document.getElementById('switch-to-login').addEventListener('click', () => {
+                hideAllModals();
+                document.getElementById('login-modal').style.display = 'block';
+            });
 
             // Close modals
             document.querySelectorAll('.close-modal').forEach(btn => {
@@ -1616,17 +1512,28 @@
                 const pilgrimNames = [], pilgrimDOBs = [];
 
                 for (let i = 1; i <= passengers; i++) {
-                    const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value?.trim() || 'N/A';
-                    const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || 'N/A';
-                    pilgrimNames.push(name);
-                    pilgrimDOBs.push(dob);
+                    const nameInput = document.querySelector(`[name="pilgrim-name-${i}"]`);
+                    const dobInput = document.querySelector(`[name="pilgrim-dob-${i}"]`);
+                    if (!nameInput?.value?.trim()) {
+                        alert(`❌ Please enter full name for Pilgrim ${i}.`);
+                        return;
+                    }
+                    pilgrimNames.push(nameInput.value.trim());
+                    pilgrimDOBs.push(dobInput?.value || '');
+                }
+
+                const userEmail = document.getElementById('email').value.trim();
+                const userPhone = document.getElementById('phone').value.trim();
+                if (!userEmail || !userPhone) {
+                    alert('❌ Please enter your contact details.');
+                    return;
                 }
 
                 const bookingData = {
                     packageId: currentPackage.id,
                     packageName: currentPackage.title,
-                    userEmail: document.getElementById('email').value.trim(),
-                    userPhone: document.getElementById('phone').value.trim(),
+                    userEmail,
+                    userPhone,
                     passengers,
                     pilgrimNames,
                     pilgrimDOBs,
@@ -1637,7 +1544,7 @@
                     await saveBookingToSupabase(bookingData);
                     document.getElementById('slip-package').textContent = bookingData.packageName;
                     document.getElementById('slip-pilgrims').textContent = pilgrimNames.join(', ');
-                    document.getElementById('slip-contact').textContent = `${bookingData.userEmail} | ${bookingData.userPhone}`;
+                    document.getElementById('slip-contact').textContent = `${userEmail} | ${userPhone}`;
                     document.getElementById('slip-agency').textContent = currentPackage.agent || 'Unknown';
 
                     document.getElementById('booking-slip').style.display = 'block';
@@ -1650,7 +1557,7 @@
                 }
             });
 
-            // Inquiry form (unchanged logic)
+            // Inquiry form (works without login)
             document.getElementById('inquiry-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const agencyName = document.getElementById('inquiry-agency-name').value;
@@ -1660,12 +1567,9 @@
                 const phone = document.getElementById('inq-phone').value;
                 const userMessage = document.getElementById('inq-message').value;
 
-                let message = `Hello ${agencyName},\n`;
-                message += `I am ${fullName}.\n`;
+                let message = `Hello ${agencyName},\nI am ${fullName}.\n`;
                 if (email) message += `Email: ${email}\n`;
-                message += `Phone: +960 ${phone}\n`;
-                message += `Inquiry: ${userMessage}\n`;
-                message += `Sent via GoUmrah.mv`;
+                message += `Phone: +960 ${phone}\nInquiry: ${userMessage}\nSent via GoUmrah.mv`;
                 const encodedMessage = encodeURIComponent(message);
                 window.open(`https://wa.me/${agencyPhone}?text=${encodedMessage}`, '_blank');
                 window.open(`https://t.me/+${agencyPhone}`, '_blank');
@@ -1690,10 +1594,50 @@
             ['departure-date', 'duration', 'price-range', 'package-type'].forEach(id => {
                 document.getElementById(id).addEventListener('change', () => {
                     const tab = document.querySelector('.tab-btn.active').dataset.tab;
-                    if (tab === 'agencies') filterAgencies();
+                    if (tab === 'agencies') displayAgencies(agencies);
                     else filterGroups();
                 });
             });
+
+            function filterGroups() {
+                const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+                let list = activeTab === 'umrah' ? [...umrahGroups] : [...hajjGroups];
+                const month = document.getElementById('departure-date').value;
+                const dur = document.getElementById('duration').value;
+                const price = document.getElementById('price-range').value;
+                const pkgType = document.getElementById('package-type').value;
+
+                if (month) {
+                    const year = month.split('-')[0];
+                    list = list.filter(g => g.departure.includes(year));
+                }
+                if (dur !== 'all') {
+                    list = list.filter(g => {
+                        const d = parseInt(g.duration) || 0;
+                        if (dur === '7') return d <= 7;
+                        if (dur === '10') return d > 7 && d <= 10;
+                        if (dur === '14') return d > 10 && d <= 14;
+                        if (dur === '21') return d > 21;
+                        return true;
+                    });
+                }
+                if (price !== 'all') {
+                    list = list.filter(g => {
+                        const pText = g.price.replace(/[^\d]/g, '');
+                        const p = parseInt(pText.substring(0,5)) || 0;
+                        if (price === 'low') return p < 30000;
+                        if (price === 'medium') return p >= 30000 && p <= 50000;
+                        if (price === 'high') return p > 50000;
+                        return true;
+                    });
+                }
+                if (pkgType !== 'all') {
+                    list = list.filter(g => g.type === pkgType);
+                }
+
+                if (activeTab === 'umrah') displayGroups(list, 'umrah-container');
+                else displayGroups(list, 'hajj-container');
+            }
 
             // Mobile menu
             document.querySelector('.mobile-menu').addEventListener('click', () => {
