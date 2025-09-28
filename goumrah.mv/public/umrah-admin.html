@@ -1,38 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Supabase Login Test</title>
+  <title>Umrah Admin - DEBUG MODE</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
+    input, button { width: 100%; padding: 0.75rem; margin: 0.5rem 0; }
+    button { background: #3b82f6; color: white; border: none; cursor: pointer; }
+    .error { color: red; background: #fee; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+    .success { color: green; background: #efe; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+    .debug { background: #f0f0f0; padding: 1rem; margin: 1rem 0; border-radius: 4px; font-family: monospace; }
+  </style>
 </head>
 <body>
-  <input type="email" id="email" placeholder="Email" value="test@example.com">
-  <input type="password" id="password" placeholder="Password" value="password123">
-  <button onclick="testLogin()">Test Login</button>
-  <pre id="result"></pre>
+  <h1>Umrah Admin Login - DEBUG MODE</h1>
+  
+  <div class="debug">
+    <strong>🔧 DEBUG INFO:</strong><br>
+    - Open browser DevTools (F12) → Console tab<br>
+    - Check for red error messages<br>
+    - Make sure you're using http:// not file://
+  </div>
+
+  <input type="email" id="email" placeholder="Email" value="agency@test.com">
+  <input type="password" id="password" placeholder="Password" value="Password123!">
+  <button onclick="login()">Login</button>
+  
+  <div id="status"></div>
 
   <script>
-    // 👇 REPLACE WITH YOUR ACTUAL SUPABASE INFO
-    const supabase = supabase.createClient(
-      'https://your-actual-project.supabase.co',
-      'your-actual-anon-key'
-    );
+    // 👇 REPLACE THESE WITH YOUR ACTUAL SUPABASE CREDENTIALS!
+    const SUPABASE_URL = 'https://bkgagnttyqgtnxamvhcx.supabase.co'; // ← CHANGE THIS
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrZ2FnbnR0eXFndG54YW12aGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5ODMxNzIsImV4cCI6MjA3NDU1OTE3Mn0.dlY2Wlg5ZMuio9esi4-qwfOkcBSSExptvVf_pVviLtQ';          // ← CHANGE THIS
 
-    async function testLogin() {
+    console.log('🔧 Initializing Supabase...');
+    console.log('URL:', SUPABASE_URL);
+    console.log('Key length:', SUPABASE_ANON_KEY.length);
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      
-      console.log('Attempting login...');
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      const result = document.getElementById('result');
-      if (error) {
-        result.textContent = 'ERROR: ' + error.message;
-        console.error('Login error:', error);
-      } else {
-        result.textContent = 'SUCCESS! User ID: ' + data.user.id;
-        console.log('Login success:', data);
+      const statusDiv = document.getElementById('status');
+
+      // Clear previous messages
+      statusDiv.innerHTML = '';
+
+      console.log('📧 Attempting login with email:', email);
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ 
+          email, 
+          password 
+        });
+
+        if (error) {
+          console.error('❌ Login ERROR:', error);
+          statusDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+          statusDiv.innerHTML += `<div class="debug">Error details: ${JSON.stringify(error, null, 2)}</div>`;
+        } else {
+          console.log('✅ Login SUCCESS:', data);
+          statusDiv.innerHTML = `<div class="success">✅ Login successful!<br>User ID: ${data.user.id}</div>`;
+          statusDiv.innerHTML += `<div class="debug">Full response: ${JSON.stringify(data, null, 2)}</div>`;
+          
+          // Test: Try to fetch session
+          const {  sessionData } = await supabase.auth.getSession();
+          console.log('🔑 Session ', sessionData);
+        }
+      } catch (err) {
+        console.error('💥 Unexpected error:', err);
+        statusDiv.innerHTML = `<div class="error">💥 Unexpected error: ${err.message}</div>`;
       }
     }
+
+    // Check if already logged in
+    async function checkSession() {
+      console.log('🔍 Checking existing session...');
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Session check error:', error);
+        return;
+      }
+      
+      if (session) {
+        console.log('✅ Already logged in:', session.user.email);
+        document.getElementById('status').innerHTML = 
+          `<div class="success">✅ Already logged in as: ${session.user.email}</div>`;
+      } else {
+        console.log('ℹ️ No active session');
+      }
+    }
+
+    // Run on page load
+    checkSession();
   </script>
 </body>
 </html>
