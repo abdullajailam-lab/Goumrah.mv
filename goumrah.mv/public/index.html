@@ -824,9 +824,7 @@
             <h2>Umrah Packages from Maldives</h2>
             <p>Handpicked spiritual journeys with trusted local agencies</p>
         </div>
-        <div class="groups-grid" id="umrah-container">
-            <div class="loading">Loading packages...</div>
-        </div>
+        <div class="groups-grid" id="umrah-container"></div>
     </section>
     <section class="groups-section" id="hajj" style="display: none;">
         <div class="section-header">
@@ -852,7 +850,7 @@
                 <div class="social-links">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/9607995251?text=Hello%20GoUmrah.mv,%20I%20need%20help%20with%20my%20Umrah%20booking." target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://wa.me/9601234567?text=Hello%20GoUmrah.mv,%20I%20need%20help%20with%20my%20Umrah%20booking." target="_blank"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div class="footer-column">
@@ -869,7 +867,7 @@
                 <h3>Contact Us</h3>
                 <ul>
                     <li><i class="fas fa-map-marker-alt"></i> Male', Republic of Maldives</li>
-                    <li><i class="fas fa-phone"></i> +9607995251</li>
+                    <li><i class="fas fa-phone"></i> +960 123 4567</li>
                     <li><i class="fas fa-envelope"></i> info@goumrah.mv</li>
                     <li><i class="fas fa-clock"></i> Sunday–Thursday: 9AM – 5PM</li>
                 </ul>
@@ -879,7 +877,7 @@
             <p>&copy; 2025 GoUmrah.mv – All Rights Reserved</p>
         </div>
     </footer>
-    <a href="https://wa.me/9607995251?text=Hello%20GoUmrah.mv!%20I%20have%20a%20question%20about%20Umrah%20packages." class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/9601234567?text=Hello%20GoUmrah.mv!%20I%20have%20a%20question%20about%20Umrah%20packages." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
     <!-- Modals -->
@@ -953,7 +951,7 @@
                     <div class="form-group" style="margin-bottom: 1.5rem;">
                         <div style="position: relative;">
                             <i class="fas fa-users" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray);"></i>
-                            <select id="reg-travel-type" class="auth-input" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
+                            <select id="reg-travel-type" class="auth-input" style="width: 100%; padding: 1.1rem 1.1rem 1.1rem 48px; border: 1px solid #e0e0e0; border-radius: 14px; font-size: 1rem; background: white; appearance: none; background-image: url('image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' fill=\'%236c757d\' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.414 0z\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center;" required>
                                 <option value=""></option>
                                 <option value="individual">Myself Only</option>
                                 <option value="family">Family (Spouse & Children)</option>
@@ -1236,63 +1234,32 @@
             { id: 9, name: "ZamZam Hajj & Umrah", contact: "+960 799 9065 / +960 777 6174 / +960 791 1121", phone: "9607999065", type: "zamzam" },
             { id: 10, name: "Tazkiyah Pvt Ltd", contact: "+960 777 9471", phone: "9607779471", type: "tazkiyah" },
         ];
-
-        // === NEW: LOAD UMRah PACKAGES FROM umrah_packages TABLE ===
-        async function loadUmrahPackagesFromSupabase() {
-            try {
-                console.log('Loading Umrah packages from Supabase...');
-                const { data, error } = await supabase
-                    .from('umrah_packages')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('departure_date', { ascending: true });
-
-                if (error) throw error;
-
-                // Map Supabase fields to your UI structure
-                umrahGroups = data.map(pkg => ({
-                    id: pkg.id,
-                    title: pkg.name,
-                    agent: pkg.business_id ? 'Agency id: ' + pkg.business_id : 'Unknown Agency',
-                    price: `MVR ${parseFloat(pkg.price).toLocaleString()}`,
-                    departure: new Date(pkg.departure_date).toLocaleDateString('en-GB'),
-                    duration: `${pkg.duration_days} Days`,
-                    image: pkg.image_url 
-                        ? (pkg.image_url.startsWith('http') 
-                            ? pkg.image_url 
-                            : `https://bkgagnttyqgtnxamvhcx.supabase.co/storage/v1/object/public/umrah-package-images/${pkg.image_url}`)
-                        : 'https://placehold.co/600x400/e2e8f0/64748b?text=No+Image',
-                    description: pkg.description || 'No description available.',
-                    features: [
-                        pkg.meals_included ? 'Meals Included' : 'Meals Not Included',
-                        pkg.visa_included ? 'Visa Included' : 'Visa Not Included',
-                        `Duration: ${pkg.duration_days} days`,
-                        `Departure: ${new Date(pkg.departure_date).toLocaleDateString()}`
-                    ].filter(Boolean),
-                    type: pkg.is_active ? 'standard' : 'inactive' // Adjust based on your needs
-                }));
-
-                console.log('Umrah packages loaded:', umrahGroups);
-                return true;
-            } catch (error) {
-                console.error('Error loading Umrah packages:', error);
-                return false;
-            }
-        }
-
         // === SUPERBASE FUNCTIONS ===
         async function loadPackagesFromSupabase() {
             try {
                 console.log('Loading data from Supabase...');
-                // Load Umrah packages from the correct table
-                const umrahLoaded = await loadUmrahPackagesFromSupabase();
-                if (!umrahLoaded) {
-                    // Fallback to local data if Supabase fails
-                    umrahGroups = [...localUmrahGroups];
-                }
-
-                // Load Hajj packages (unchanged)
-                const { data: hajjData, error: hajjError } = await supabase
+                // Load Umrah packages
+                const {  umrahData, error: umrahError } = await supabase
+                    .from('packages')
+                    .select('*')
+                    .eq('package_type', 'umrah')
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+                if (umrahError) throw umrahError;
+                umrahGroups = umrahData.map(pkg => ({
+                    id: pkg.id,
+                    title: pkg.title,
+                    agent: pkg.agent,
+                    price: pkg.price_range,
+                    departure: pkg.departure_info,
+                    duration: pkg.duration,
+                    image: pkg.image_url,
+                    description: pkg.description,
+                    features: pkg.features || [],
+                    type: pkg.category
+                }));
+                // Load Hajj packages
+                const {  hajjData, error: hajjError } = await supabase
                     .from('packages')
                     .select('*')
                     .eq('package_type', 'hajj')
@@ -1311,8 +1278,7 @@
                     features: pkg.features || [],
                     type: pkg.category
                 }));
-
-                // Load agencies (unchanged)
+                // Load agencies
                 const { data: agenciesData, error: agenciesError } = await supabase
                     .from('agencies')
                     .select('*')
@@ -1326,7 +1292,6 @@
                     phone: agency.phone,
                     type: agency.agency_type
                 }));
-
                 console.log('Data loaded successfully from Supabase');
                 return true;
             } catch (error) {
@@ -1447,11 +1412,11 @@
         }
         async function register(userData) {
   // 1. Register the user in Supabase Auth
-  const { data: authData, error: authError } = await supabase.auth.signUp({
+  const {  authData, error: authError } = await supabase.auth.signUp({
     email: userData.email,
     password: userData.password,
     options: {
-      data: {
+       {
         full_name: userData.name,
         phone: userData.phone,
         travel_type: userData.travelType
@@ -1915,7 +1880,3 @@
     </script>
 </body>
 </html>
-
-
-
-
