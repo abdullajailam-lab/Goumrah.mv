@@ -1254,7 +1254,7 @@
                     id: pkg.id,
                     title: pkg.name,
                     agent: pkg.business_id ? 'Agency ID: ' + pkg.business_id : 'Unknown Agency',
-                    price: `SAR ${parseFloat(pkg.price).toLocaleString()}`,
+                    price: `MVR ${parseFloat(pkg.price).toLocaleString()}`,
                     departure: new Date(pkg.departure_date).toLocaleDateString('en-GB'),
                     duration: `${pkg.duration_days} Days`,
                     image: pkg.image_url 
@@ -1915,3 +1915,4 @@
     </script>
 </body>
 </html>
+
