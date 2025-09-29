@@ -1364,31 +1364,31 @@
             }
         }
         async function saveBookingToSupabase(bookingData) {
-            try {
-                const { data, error } = await supabase
-                    .from('bookings')
-                    .insert([
-                        {
-                            package_id: bookingData.packageId,
-                            package_name: bookingData.packageName,
-                            user_email: bookingData.userEmail,
-                            user_phone: bookingData.userPhone,
-                            passengers: bookingData.passengers,
-                            pilgrim_names: bookingData.pilgrimNames,
-                            pilgrim_dobs: bookingData.pilgrimDOBs,
-                            special_requests: bookingData.specialRequests,
-                            status: 'pending',
-                            created_at: new Date().toISOString()
-                        }
-                    ])
-                    .select();
-                if (error) throw error;
-                return data;
-            } catch (error) {
-                console.error('Error saving booking to Supabase:', error);
-                return null;
-            }
-        }
+    try {
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert([
+                {
+                    package_id: bookingData.packageId,
+                    package_name: bookingData.packageName,
+                    user_email: bookingData.userEmail,
+                    user_phone: bookingData.userPhone,
+                    passengers: bookingData.passengers,
+                    pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅ stringify
+                    pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅ stringify
+                    special_requests: bookingData.specialRequests || '',
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                }
+            ])
+            .select();
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error('Error saving booking to Supabase:', error);
+        return null;
+    }
+}
         async function saveInquiryToSupabase(inquiryData) {
             try {
                 const { data, error } = await supabase
@@ -1923,6 +1923,7 @@
     </script>
 </body>
 </html>
+
 
 
 
