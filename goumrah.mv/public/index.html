@@ -1378,7 +1378,7 @@
                     pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅
                     special_requests: bookingData.specialRequests || '',
                     status: 'pending'
-                    // created_at is auto-set by default
+                    // created_at is auto-set by DEFAULT NOW()
                 }
             ])
             .select();
@@ -1389,6 +1389,7 @@
         console.error('Booking save error:', error);
         return null;
     }
+}
 }
         async function saveInquiryToSupabase(inquiryData) {
             try {
@@ -1924,6 +1925,7 @@
     </script>
 </body>
 </html>
+
 
 
 
