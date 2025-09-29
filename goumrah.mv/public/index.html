@@ -1427,24 +1427,32 @@
             }
         }
         async function login(email, password) {
-            try {
-                // For demo purposes, using simple auth
-                // In production, use Supabase Auth
-                const { data, error } = await supabase.auth.signInWithPassword({
-  email: email,
-  password: password
-});
-                localStorage.setItem('goumrah_user', JSON.stringify(userData));
-                updateAuthUI();
-                hideAllModals();
-                alert('✅ Login successful! Welcome back.');
-                return true;
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('❌ Login failed. Please try again.');
-                return false;
-            }
-        }
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) throw error;
+
+        // Correctly use the authenticated user data
+        const userData = {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.user_metadata?.full_name || email.split('@')[0]
+        };
+
+        localStorage.setItem('goumrah_user', JSON.stringify(userData));
+        updateAuthUI();
+        hideAllModals();
+        alert('✅ Login successful! Welcome back.');
+        return true;
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('❌ Login failed. Please try again.');
+        return false;
+    }
+}
         async function register(userData) {
   // 1. Register the user in Supabase Auth
   const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -1915,6 +1923,7 @@
     </script>
 </body>
 </html>
+
 
 
 
