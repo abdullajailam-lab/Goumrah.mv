@@ -1382,12 +1382,14 @@
                 }
             ])
             .select();
+
         if (error) throw error;
         return data;
     } catch (error) {
         console.error('Error saving booking to Supabase:', error);
         return null;
     }
+}
 }
         async function saveInquiryToSupabase(inquiryData) {
             try {
@@ -1923,6 +1925,7 @@
     </script>
 </body>
 </html>
+
 
 
 
