@@ -1377,8 +1377,8 @@
                     pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅
                     pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅
                     special_requests: bookingData.specialRequests || '',
-                    status: 'pending',
-                    created_at: new Date().toISOString()
+                    status: 'pending'
+                    // created_at is auto-set by default
                 }
             ])
             .select();
@@ -1386,7 +1386,7 @@
         if (error) throw error;
         return data;
     } catch (error) {
-        console.error('Error saving booking to Supabase:', error);
+        console.error('Booking save error:', error);
         return null;
     }
 }
@@ -1924,6 +1924,7 @@
     </script>
 </body>
 </html>
+
 
 
 
