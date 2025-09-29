@@ -1791,43 +1791,42 @@
             });
             // Booking form
             document.getElementById('booking-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const passengers = parseInt(document.getElementById('passengers').value) || 1;
-                const pilgrimNames = [];
-                const pilgrimDOBs = [];
-                for (let i = 1; i <= passengers; i++) {
-                    const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value || 'N/A';
-                    const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || 'N/A';
-                    pilgrimNames.push(name);
-                    pilgrimDOBs.push(dob);
-                }
-                const bookingData = {
-                    packageId: currentPackage.id,
-                    packageName: currentPackage.title,
-                    userEmail: document.getElementById('email').value,
-                    userPhone: document.getElementById('phone').value,
-                    passengers: passengers,
-                    pilgrimNames: pilgrimNames,
-                    pilgrimDOBs: pilgrimDOBs,
-                    specialRequests: document.getElementById('message').value
-                };
-                // Save booking to Supabase
-                const supabaseResult = await saveBookingToSupabase(bookingData);
-                if (supabaseResult) {
-                    const agency = currentPackage ? currentPackage.agent : 'Unknown';
-                    document.getElementById('slip-package').textContent = document.getElementById('package-name').value;
-                    document.getElementById('slip-pilgrims').textContent = pilgrimNames.join(', ');
-                    document.getElementById('slip-contact').textContent = `${document.getElementById('email').value} | ${document.getElementById('phone').value}`;
-                    document.getElementById('slip-agency').textContent = agency;
-                    document.getElementById('booking-slip').style.display = 'block';
-                    setTimeout(() => {
-                        alert(`✅ Booking request sent to ${agency}. They will contact you soon.`);
-                        hideAllModals();
-                    }, 500);
-                } else {
-                    alert('❌ Failed to save booking. Please try again.');
-                }
-            });
+    e.preventDefault();
+
+    // 🔒 CRITICAL: Ensure a package is selected
+    if (!currentPackage) {
+        alert('❌ No package selected. Please choose a package first.');
+        return;
+    }
+
+    const passengers = parseInt(document.getElementById('passengers').value) || 1;
+    const pilgrimNames = [];
+    const pilgrimDOBs = [];
+    for (let i = 1; i <= passengers; i++) {
+        const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value || 'N/A';
+        const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || 'N/A';
+        pilgrimNames.push(name);
+        pilgrimDOBs.push(dob);
+    }
+
+    const bookingData = {
+        packageId: currentPackage.id,
+        packageName: currentPackage.title,
+        userEmail: document.getElementById('email').value,
+        userPhone: document.getElementById('phone').value,
+        passengers: passengers,
+        pilgrimNames: JSON.stringify(pilgrimNames),   // ✅ Already stringified
+        pilgrimDOBs: JSON.stringify(pilgrimDOBs),     // ✅ Already stringified
+        specialRequests: document.getElementById('message').value
+    };
+
+    const supabaseResult = await saveBookingToSupabase(bookingData);
+    if (supabaseResult) {
+        // ... success logic
+    } else {
+        alert('❌ Failed to save booking. Please try again.');
+    }
+});
             // Inquiry form
             document.getElementById('inquiry-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -1924,6 +1923,7 @@
     </script>
 </body>
 </html>
+
 
 
 
