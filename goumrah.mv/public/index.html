@@ -1374,8 +1374,8 @@
                     user_email: bookingData.userEmail,
                     user_phone: bookingData.userPhone,
                     passengers: bookingData.passengers,
-                    pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅
-                    pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅
+                    pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅ Convert array to string
+                    pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅ Convert array to string
                     special_requests: bookingData.specialRequests || '',
                     status: 'pending'
                     // created_at is auto-set by DB default
@@ -1924,6 +1924,7 @@
     </script>
 </body>
 </html>
+
 
 
 
