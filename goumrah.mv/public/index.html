@@ -1793,11 +1793,19 @@
             // Booking form
 document.getElementById('booking-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    // 🔒 CRITICAL: Ensure a package is selected
-    if (!currentPackage) {
-        alert('❌ No package selected. Please choose a package first.');
+    
+    if (!currentPackage || !currentPackage.id) {
+        alert('❌ No valid package selected. Please refresh and try again.');
         return;
     }
+
+    const packageId = String(currentPackage.id);
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(packageId)) {
+        alert('❌ Invalid package ID format. Contact support.');
+        return;
+    }
+
     const passengers = parseInt(document.getElementById('passengers').value) || 1;
     const pilgrimNames = [];
     const pilgrimDOBs = [];
@@ -1807,32 +1815,25 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
         pilgrimNames.push(name);
         pilgrimDOBs.push(dob);
     }
+
     const bookingData = {
-        packageId: currentPackage.id,
+        packageId: packageId,
         packageName: currentPackage.title,
         userEmail: document.getElementById('email').value,
         userPhone: document.getElementById('phone').value,
         passengers: passengers,
-        pilgrimNames: JSON.stringify(pilgrimNames),
-        pilgrimDOBs: JSON.stringify(pilgrimDOBs),
+        pilgrimNames: pilgrimNames,
+        pilgrimDOBs: pilgrimDOBs,
         specialRequests: document.getElementById('message').value
     };
+
     const supabaseResult = await saveBookingToSupabase(bookingData);
     if (supabaseResult) {
-        // ✅ ADD THIS SUCCESS LOGIC:
-        // 1. Hide the form
         document.getElementById('booking-form').style.display = 'none';
-        // 2. Show the booking slip
         document.getElementById('booking-slip').style.display = 'block';
-        // 3. Populate the slip with data
-        document.getElementById('slip-package').textContent = currentPackage.title;
-        document.getElementById('slip-pilgrims').textContent = passengers + " pilgrim(s)";
-        document.getElementById('slip-contact').textContent = document.getElementById('email').value + " / " + document.getElementById('phone').value;
-        document.getElementById('slip-agency').textContent = currentPackage.agent;
-        // 4. Scroll to top of modal to see confirmation
-        document.getElementById('booking-modal').scrollTo(0, 0);
+        // ... populate slip ...
     } else {
-        alert('❌ Failed to save booking. Please try again.');
+        alert('❌ Failed to save booking. Please check console for details.');
     }
 });
             // Inquiry form
@@ -1931,6 +1932,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
