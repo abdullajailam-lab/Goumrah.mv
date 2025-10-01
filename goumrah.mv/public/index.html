@@ -1550,22 +1550,23 @@
     btn.addEventListener('click', () => {
         const packageId = btn.dataset.id;
         // Ensure we compare types correctly (string vs string)
-        const g = groups.find(x => String(x.id) === String(packageId));
-        
-        if (!g) {
-            console.error('❌ Package not found for ID:', packageId);
-            alert('⚠️ Package not found. Please refresh the page.');
-            return;
-        }
+        const packageId = btn.dataset.id;
+console.log('🔍 Looking for package ID:', packageId);
+console.log('📦 Available package IDs:', groups.map(g => g.id));
 
-        currentPackage = g;
-        console.log('✅ Selected package:', currentPackage); // Debug
+const g = groups.find(x => String(x.id) === String(packageId));
 
-        document.getElementById('package-name').value = g.title;
-        generatePilgrimFields(1);
-        document.getElementById('booking-modal').style.display = 'block';
-    });
-});
+if (!g) {
+    alert('⚠️ Package not found. Please refresh the page.');
+    console.error('❌ Package not found for ID:', packageId);
+    return;
+}
+
+currentPackage = g;
+console.log('✅ Selected package:', currentPackage);
+document.getElementById('package-name').value = g.title;
+generatePilgrimFields(1);
+document.getElementById('booking-modal').style.display = 'block';
         }
         function showPackageDetail(packageData) {
             currentPackage = packageData;
@@ -1793,19 +1794,24 @@
             // Booking form
 document.getElementById('booking-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
+    // 🔒 1. Ensure package is selected
     if (!currentPackage || !currentPackage.id) {
-        alert('❌ No valid package selected. Please refresh and try again.');
+        alert('❌ No valid package selected.');
+        console.error('No currentPackage or ID');
         return;
     }
 
+    // 🔒 2. Validate package_id is a UUID
     const packageId = String(currentPackage.id);
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(packageId)) {
-        alert('❌ Invalid package ID format. Contact support.');
+        alert('❌ Invalid package ID format. Only real packages can be booked.');
+        console.error('Invalid package_id:', packageId);
         return;
     }
 
+    // 🔒 3. Collect form data
     const passengers = parseInt(document.getElementById('passengers').value) || 1;
     const pilgrimNames = [];
     const pilgrimDOBs = [];
@@ -1817,21 +1823,28 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     }
 
     const bookingData = {
-        packageId: packageId,
+        packageId: packageId, // ✅ Now guaranteed to be valid UUID string
         packageName: currentPackage.title,
         userEmail: document.getElementById('email').value,
         userPhone: document.getElementById('phone').value,
         passengers: passengers,
-        pilgrimNames: pilgrimNames,
+        pilgrimNames: pilgrimNames, // ✅ Send as array (your function handles JSON.stringify)
         pilgrimDOBs: pilgrimDOBs,
         specialRequests: document.getElementById('message').value
     };
 
+    // 🔒 4. Save to Supabase
     const supabaseResult = await saveBookingToSupabase(bookingData);
     if (supabaseResult) {
+        // ✅ Success: show confirmation
         document.getElementById('booking-form').style.display = 'none';
         document.getElementById('booking-slip').style.display = 'block';
-        // ... populate slip ...
+        document.getElementById('slip-package').textContent = currentPackage.title;
+        document.getElementById('slip-pilgrims').textContent = `${passengers} pilgrim(s)`;
+        document.getElementById('slip-contact').textContent = 
+            `${document.getElementById('email').value} / ${document.getElementById('phone').value}`;
+        document.getElementById('slip-agency').textContent = currentPackage.agent;
+        document.getElementById('booking-modal').scrollTo(0, 0);
     } else {
         alert('❌ Failed to save booking. Please check console for details.');
     }
@@ -1932,6 +1945,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
