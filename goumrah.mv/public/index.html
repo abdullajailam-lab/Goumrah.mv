@@ -1547,24 +1547,25 @@
             });
             // Add event listeners
             document.querySelectorAll('.book-now').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const g = groups.find(x => x.id == btn.dataset.id);
-                    if (g) {
-                        currentPackage = g;
-                        document.getElementById('package-name').value = g.title;
-                        generatePilgrimFields(1);
-                        document.getElementById('booking-modal').style.display = 'block';
-                    }
-                });
-            });
-            document.querySelectorAll('.view-details').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const g = groups.find(x => x.id == btn.dataset.id);
-                    if (g) {
-                        showPackageDetail(g);
-                    }
-                });
-            });
+    btn.addEventListener('click', () => {
+        const packageId = btn.dataset.id;
+        // Ensure we compare types correctly (string vs string)
+        const g = groups.find(x => String(x.id) === String(packageId));
+        
+        if (!g) {
+            console.error('❌ Package not found for ID:', packageId);
+            alert('⚠️ Package not found. Please refresh the page.');
+            return;
+        }
+
+        currentPackage = g;
+        console.log('✅ Selected package:', currentPackage); // Debug
+
+        document.getElementById('package-name').value = g.title;
+        generatePilgrimFields(1);
+        document.getElementById('booking-modal').style.display = 'block';
+    });
+});
         }
         function showPackageDetail(packageData) {
             currentPackage = packageData;
@@ -1930,6 +1931,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
