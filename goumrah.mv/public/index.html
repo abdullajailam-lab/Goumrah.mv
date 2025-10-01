@@ -1790,15 +1790,13 @@
                 await register(userData);
             });
             // Booking form
-            document.getElementById('booking-form').addEventListener('submit', async (e) => {
+document.getElementById('booking-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     // 🔒 CRITICAL: Ensure a package is selected
     if (!currentPackage) {
         alert('❌ No package selected. Please choose a package first.');
         return;
     }
-
     const passengers = parseInt(document.getElementById('passengers').value) || 1;
     const pilgrimNames = [];
     const pilgrimDOBs = [];
@@ -1808,21 +1806,30 @@
         pilgrimNames.push(name);
         pilgrimDOBs.push(dob);
     }
-
     const bookingData = {
         packageId: currentPackage.id,
         packageName: currentPackage.title,
         userEmail: document.getElementById('email').value,
         userPhone: document.getElementById('phone').value,
         passengers: passengers,
-        pilgrimNames: JSON.stringify(pilgrimNames),   // ✅ Already stringified
-        pilgrimDOBs: JSON.stringify(pilgrimDOBs),     // ✅ Already stringified
+        pilgrimNames: JSON.stringify(pilgrimNames),
+        pilgrimDOBs: JSON.stringify(pilgrimDOBs),
         specialRequests: document.getElementById('message').value
     };
-
     const supabaseResult = await saveBookingToSupabase(bookingData);
     if (supabaseResult) {
-        // ... success logic
+        // ✅ ADD THIS SUCCESS LOGIC:
+        // 1. Hide the form
+        document.getElementById('booking-form').style.display = 'none';
+        // 2. Show the booking slip
+        document.getElementById('booking-slip').style.display = 'block';
+        // 3. Populate the slip with data
+        document.getElementById('slip-package').textContent = currentPackage.title;
+        document.getElementById('slip-pilgrims').textContent = passengers + " pilgrim(s)";
+        document.getElementById('slip-contact').textContent = document.getElementById('email').value + " / " + document.getElementById('phone').value;
+        document.getElementById('slip-agency').textContent = currentPackage.agent;
+        // 4. Scroll to top of modal to see confirmation
+        document.getElementById('booking-modal').scrollTo(0, 0);
     } else {
         alert('❌ Failed to save booking. Please try again.');
     }
@@ -1923,6 +1930,7 @@
     </script>
 </body>
 </html>
+
 
 
 
