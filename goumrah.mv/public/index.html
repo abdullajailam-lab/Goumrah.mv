@@ -1539,10 +1539,11 @@ web ok one
                                 <span>${group.duration}</span>
                             </div>
                         </div>
-                        <p class="group-description">${group.description}</p>
-                        <div class="group-features">
-                            ${group.features.map(f => `<span class="feature">${f}</span>`).join('')}
-                        </div>
+                        <!-- Show only a short preview of the description, or none at all -->
+<p class="group-description">${group.description ? group.description.substring(0, 150) + '...' : ''}</p>
+<div class="group-features">
+    ${group.features.map(f => `<span class="feature">${f}</span>`).join('')}
+</div>
                         <div class="card-actions">
                             <button class="btn btn-outline view-details" data-id="${group.id}">View Details</button>
                             <button class="btn book-now" data-id="${group.id}">Book Now</button>
@@ -1936,6 +1937,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
