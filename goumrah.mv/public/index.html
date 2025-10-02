@@ -1574,55 +1574,68 @@ web ok one
             });
         }
         function showPackageDetail(packageData) {
-            currentPackage = packageData;
-            const modalContent = document.getElementById('package-detail-content');
-            modalContent.innerHTML = `
-                <div class="package-hero" style="background: linear-gradient(rgba(13,59,42,0.7), rgba(8,42,29,0.8)), url('${packageData.image}'); padding: 1.5rem; color: white; border-radius: 12px; margin-bottom: 1.5rem;">
-                    <h2 style="font-size: 1.8rem; font-family: 'Amiri', serif;">${packageData.title}</h2>
-                    <p style="opacity: 0.9;">By ${packageData.agent}</p>
-                    <div style="font-size: 1.4rem; font-weight: 700; color: var(--secondary);">${packageData.price}</div>
-                </div>
-                <div class="detail-section">
-                    <h4><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> Overview</h4>
-                    <p>${packageData.description}</p>
-                </div>
-                <div class="detail-section">
-                    <h4><i class="fas fa-star" style="color: var(--secondary); margin-right: 8px;"></i> Key Features</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem;">
-                        ${packageData.features.map(f => `<span class="feature">${f}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="detail-section" style="background: var(--accent-bg); padding: 1.2rem; border-radius: 10px; margin: 1.2rem 0;">
-                    <h4><i class="fas fa-route" style="color: var(--primary); margin-right: 8px;"></i> Itinerary Highlights</h4>
-                    <ul style="padding-left: 1.4rem; color: var(--gray);">
-                        <li>Arrival in Jeddah / Makkah</li>
-                        <li>Perform Umrah rituals with guidance</li>
-                        <li>Ziyarat in Makkah & Madinah</li>
-                        <li>Comfortable return arrangements</li>
-                    </ul>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0;">
-                    <div style="background: #f8f9f5; padding: 1rem; border-radius: 8px;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-check-circle"></i> Included</h5>
-                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                            <li>Round-trip flights</li>
-                            <li>Hotel near Haram</li>
-                            <li>Visa processing</li>
-                            <li>Meals (as per plan)</li>
-                        </ul>
-                    </div>
-                    <div style="background: #fdf6f0; padding: 1rem; border-radius: 8px;">
-                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-exclamation-circle"></i> Notes</h5>
-                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                            <li>50% advance payment</li>
-                            <li>Subject to availability</li>
-                            <li>Children under 2: free</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-            document.getElementById('package-detail-modal').style.display = 'block';
-        }
+    currentPackage = packageData;
+    const modalContent = document.getElementById('package-detail-content');
+
+    // Safely extract features or fallback
+    const featuresHtml = packageData.features && packageData.features.length
+        ? packageData.features.map(f => `<span class="feature">${f}</span>`).join('')
+        : '<span class="feature">No details available</span>';
+
+    // Build "Included" list using actual package features
+    let includedItems = [];
+    if (packageData.features) {
+        // Use the features array directly for "Included"
+        includedItems = packageData.features;
+    } else {
+        includedItems = ['Details not specified'];
+    }
+
+    // Create a clean, full-width image container
+    const imageContainer = `
+        <div style="width: 100%; height: auto; overflow: hidden; border-radius: 12px; margin-bottom: 1.5rem;">
+            <img src="${packageData.image || 'https://placehold.co/600x400/e2e8f0/64748b?text=No+Image'}" 
+                 alt="${packageData.title}" 
+                 style="width: 100%; height: auto; object-fit: contain; display: block; background: #f0f0f0;"/>
+        </div>
+    `;
+
+    modalContent.innerHTML = `
+        ${imageContainer}
+        <div class="package-hero" style="padding: 1.5rem; color: var(--dark); border-radius: 12px; margin-bottom: 1.5rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <h2 style="font-size: 1.8rem; font-family: 'Amiri', serif; color: var(--primary);">${packageData.title}</h2>
+            <p style="opacity: 0.9; color: var(--gray);">By ${packageData.agent}</p>
+            <div style="font-size: 1.4rem; font-weight: 700; color: var(--secondary);">${packageData.price}</div>
+        </div>
+        <div class="detail-section">
+            <h4><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> Overview</h4>
+            <p>${packageData.description || 'No description provided.'}</p>
+        </div>
+        <div class="detail-section">
+            <h4><i class="fas fa-star" style="color: var(--secondary); margin-right: 8px;"></i> Package Includes</h4>
+            <ul style="font-size: 0.95rem; padding-left: 1.2rem; margin-top: 0.6rem; line-height: 1.6;">
+                ${includedItems.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0;">
+            <div style="background: #f8f9f5; padding: 1rem; border-radius: 8px;">
+                <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-check-circle"></i> Included</h5>
+                <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
+                    ${includedItems.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+            <div style="background: #fdf6f0; padding: 1rem; border-radius: 8px;">
+                <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-exclamation-circle"></i> Notes</h5>
+                <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
+                    <li>50% advance payment required</li>
+                    <li>Subject to availability</li>
+                    <li>Final itinerary may vary</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    document.getElementById('package-detail-modal').style.display = 'block';
+}
         function openBookingModal() {
             if (currentPackage) {
                 document.getElementById('package-name').value = currentPackage.title;
@@ -1937,6 +1950,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
