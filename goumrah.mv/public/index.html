@@ -1368,57 +1368,108 @@
                 return null;
             }
         }
-        async function saveBookingToSupabase(bookingData) {
-    try {
-        const { data, error } = await supabase
-            .from('bookings')
-            .insert([
-                {
-                    package_id: bookingData.packageId,
-                    package_name: bookingData.packageName,
-                    user_email: bookingData.userEmail,
-                    user_phone: bookingData.userPhone,
-                    passengers: bookingData.passengers,
-                    pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅ Convert array to string
-                    pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅ Convert array to string
-                    special_requests: bookingData.specialRequests || '',
-                    status: 'pending'
-                    // created_at is auto-set by DB default
-                }
-            ])
-            .select();
+        // === BOOKINGS ===
+async function loadBookings() {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return logout();
 
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error('Booking save error:', error.message || error);
-        return null;
+    const bookingsContainer = document.getElementById('bookings-container');
+    bookingsContainer.innerHTML = '<p>Loading customer bookings...</p>';
+
+    // Step 1: Get all bookings (without trying to join umrah_packages)
+    const { data: bookings, error: bookingsError } = await supabase
+      .from('bookings')
+      .select(`
+        id,
+        package_id,
+        user_email,
+        passenger_count,
+        user_phone,
+        pilgrim_names,
+        pilgrim_dobs,
+        special_requests,
+        status,
+        created_at,
+        package_name  // if you store it directly in bookings
+      `)
+      .order('created_at', { ascending: false });
+
+    if (bookingsError) throw bookingsError;
+
+    if (bookings.length === 0) {
+      bookingsContainer.innerHTML = '<p>No customer bookings yet.</p>';
+      return;
     }
-}
-        async function saveInquiryToSupabase(inquiryData) {
-            try {
-                const { data, error } = await supabase
-                    .from('inquiries')
-                    .insert([
-                        {
-                            agency_name: inquiryData.agencyName,
-                            agency_phone: inquiryData.agencyPhone,
-                            user_name: inquiryData.userName,
-                            user_email: inquiryData.userEmail,
-                            user_phone: inquiryData.userPhone,
-                            message: inquiryData.message,
-                            status: 'new',
-                            created_at: new Date().toISOString()
-                        }
-                    ])
-                    .select();
-                if (error) throw error;
-                return data;
-            } catch (error) {
-                console.error('Error saving inquiry to Supabase:', error);
-                return null;
-            }
+
+    // Step 2: Get package IDs and fetch matching packages for this business
+    const packageIds = [...new Set(bookings.map(b => b.package_id).filter(id => id))];
+    
+    let validPackageIds = [];
+    if (packageIds.length > 0) {
+      const { data: packages, error: packagesError } = await supabase
+        .from('umrah_packages')
+        .select('id')
+        .in('id', packageIds)
+        .eq('business_id', user.id);
+
+      if (packagesError) {
+        console.warn('Could not verify packages:', packagesError);
+        // Continue anyway — show bookings even if package info is limited
+      } else {
+        validPackageIds = packages.map(p => p.id);
+      }
+    }
+
+    // Step 3: Render bookings (only show those belonging to this business)
+    let html = '';
+    let hasValidBookings = false;
+
+    bookings.forEach(b => {
+      // Only show booking if its package belongs to this business
+      if (b.package_id && validPackageIds.includes(b.package_id)) {
+        hasValidBookings = true;
+        let statusClass = 'status-pending';
+        if (b.status === 'confirmed') statusClass = 'status-confirmed';
+        else if (b.status === 'cancelled') statusClass = 'status-cancelled';
+
+        let pilgrimNames = '—';
+        let pilgrimDobs = '—';
+        try {
+          if (b.pilgrim_names) pilgrimNames = JSON.parse(b.pilgrim_names).join(', ');
+          if (b.pilgrim_dobs) pilgrimDobs = JSON.parse(b.pilgrim_dobs).join(', ');
+        } catch (e) {
+          console.warn('Failed to parse pilgrim data', e);
         }
+
+        html += `
+          <div class="card booking-item">
+            <h4>${pilgrimNames}</h4>
+            <p><strong>Email:</strong> ${b.user_email}</p>
+            <p><strong>Phone:</strong> ${b.user_phone || '—'}</p>
+            <p><strong>Package:</strong> ${b.package_name || 'N/A'}</p>
+            <p><strong>Passengers:</strong> ${b.passenger_count || '1'}</p>
+            <p><strong>Date of Birth:</strong> ${pilgrimDobs}</p>
+            <p><strong>Special Requests:</strong> ${b.special_requests || 'None'}</p>
+            <p><strong>Status:</strong> <span class="${statusClass}">${b.status}</span></p>
+            <p><small>Booked on: ${new Date(b.created_at).toLocaleDateString()}</small></p>
+          </div>
+        `;
+      }
+    });
+
+    if (!hasValidBookings) {
+      bookingsContainer.innerHTML = '<p>No customer bookings for your packages yet.</p>';
+    } else {
+      bookingsContainer.innerHTML = html;
+    }
+
+  } catch (error) {
+    console.error('Error loading bookings:', error);
+    document.getElementById('bookings-container').innerHTML = 
+      `<p class="error">Failed to load bookings: ${error.message}</p>`;
+  }
+}
         // === AUTH STATE ===
         function updateAuthUI() {
             const isLoggedIn = localStorage.getItem('goumrah_user');
@@ -1935,6 +1986,7 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
+
 
 
 
