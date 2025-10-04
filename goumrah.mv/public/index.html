@@ -257,15 +257,11 @@
             box-shadow: var(--card-hover);
         }
         .group-image {
-    height: 210px;
-    background-size: contain; /* 👈 Changed from 'cover' to 'contain' */
-    background-position: center;
-    background-repeat: no-repeat; /* 👈 Added to prevent tiling */
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+            height: 210px;
+            background-size: cover;
+            background-position: center;
+            background-color: #f0f0f0;
+        }
         .group-content {
             padding: 1.6rem;
         }
@@ -1368,28 +1364,57 @@
                 return null;
             }
         }
-// On your customer booking page
-async function loadPackagesForBooking() {
-  const { data, error } = await supabase
-    .from('umrah_packages')
-    .select('id, name, price, departure_date')
-    .eq('is_active', true)
-    .order('departure_date', { ascending: true });
+        async function saveBookingToSupabase(bookingData) {
+    try {
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert([
+                {
+                    package_id: bookingData.packageId,
+                    package_name: bookingData.packageName,
+                    user_email: bookingData.userEmail,
+                    user_phone: bookingData.userPhone,
+                    passengers: bookingData.passengers,
+                    pilgrim_names: JSON.stringify(bookingData.pilgrimNames),   // ✅ Convert array to string
+                    pilgrim_dobs: JSON.stringify(bookingData.pilgrimDOBs),     // ✅ Convert array to string
+                    special_requests: bookingData.specialRequests || '',
+                    status: 'pending'
+                    // created_at is auto-set by DB default
+                }
+            ])
+            .select();
 
-  if (error) {
-    console.error('Failed to load packages:', error);
-    return;
-  }
-
-  // Populate dropdown or package cards
-  const packageSelect = document.getElementById('package-select');
-  data.forEach(pkg => {
-    const option = document.createElement('option');
-    option.value = pkg.id; // ✅ Real, existing ID
-    option.textContent = `${pkg.name} - MVR ${pkg.price}`;
-    packageSelect.appendChild(option);
-  });
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error('Booking save error:', error.message || error);
+        return null;
+    }
 }
+        async function saveInquiryToSupabase(inquiryData) {
+            try {
+                const { data, error } = await supabase
+                    .from('inquiries')
+                    .insert([
+                        {
+                            agency_name: inquiryData.agencyName,
+                            agency_phone: inquiryData.agencyPhone,
+                            user_name: inquiryData.userName,
+                            user_email: inquiryData.userEmail,
+                            user_phone: inquiryData.userPhone,
+                            message: inquiryData.message,
+                            status: 'new',
+                            created_at: new Date().toISOString()
+                        }
+                    ])
+                    .select();
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error saving inquiry to Supabase:', error);
+                return null;
+            }
+        }
         // === AUTH STATE ===
         function updateAuthUI() {
             const isLoggedIn = localStorage.getItem('goumrah_user');
@@ -1509,11 +1534,10 @@ async function loadPackagesForBooking() {
                                 <span>${group.duration}</span>
                             </div>
                         </div>
-                        <!-- Show only a short preview of the description, or none at all -->
-<p class="group-description">${group.description ? group.description.substring(0, 150) + '...' : ''}</p>
-<div class="group-features">
-    ${group.features.map(f => `<span class="feature">${f}</span>`).join('')}
-</div>
+                        <p class="group-description">${group.description}</p>
+                        <div class="group-features">
+                            ${group.features.map(f => `<span class="feature">${f}</span>`).join('')}
+                        </div>
                         <div class="card-actions">
                             <button class="btn btn-outline view-details" data-id="${group.id}">View Details</button>
                             <button class="btn book-now" data-id="${group.id}">Book Now</button>
@@ -1544,54 +1568,55 @@ async function loadPackagesForBooking() {
             });
         }
         function showPackageDetail(packageData) {
-    currentPackage = packageData;
-    const modalContent = document.getElementById('package-detail-content');
-
-    // Create a clean, centered, smaller image container for the modal
-    const imageContainer = `
-        <div style="width: 100%; max-width: 300px; margin: 0 auto 1.5rem; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-            <img src="${packageData.image || 'https://placehold.co/600x400/e2e8f0/64748b?text=No+Image'}" 
-                 alt="${packageData.title}" 
-                 style="width: 100%; height: auto; object-fit: contain; display: block; background: #f0f0f0;"/>
-        </div>
-    `;
-
-    modalContent.innerHTML = `
-        ${imageContainer}
-        <div class="package-hero" style="padding: 1.5rem; color: var(--dark); border-radius: 12px; margin-bottom: 1.5rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-            <h2 style="font-size: 1.8rem; font-family: 'Amiri', serif; color: var(--primary);">${packageData.title}</h2>
-            <p style="opacity: 0.9; color: var(--gray);">By ${packageData.agent}</p>
-            <div style="font-size: 1.4rem; font-weight: 700; color: var(--secondary);">${packageData.price}</div>
-        </div>
-        <div class="detail-section">
-            <h4><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> Overview</h4>
-            <p>${packageData.description || 'No description provided.'}</p>
-        </div>
-        <div class="detail-section">
-            <h4><i class="fas fa-star" style="color: var(--secondary); margin-right: 8px;"></i> Package Includes</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem;">
-                ${packageData.features.map(f => `<span class="feature">${f}</span>`).join('')}
-            </div>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0;">
-            <div style="background: #f8f9f5; padding: 1rem; border-radius: 8px;">
-                <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-check-circle"></i> Included</h5>
-                <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                    ${packageData.features.map(item => `<li>${item}</li>`).join('')}
-                </ul>
-            </div>
-            <div style="background: #fdf6f0; padding: 1rem; border-radius: 8px;">
-                <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-exclamation-circle"></i> Notes</h5>
-                <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
-                    <li>50% advance payment required</li>
-                    <li>Subject to availability</li>
-                    <li>Final itinerary may vary</li>
-                </ul>
-            </div>
-        </div>
-    `;
-    document.getElementById('package-detail-modal').style.display = 'block';
-}
+            currentPackage = packageData;
+            const modalContent = document.getElementById('package-detail-content');
+            modalContent.innerHTML = `
+                <div class="package-hero" style="background: linear-gradient(rgba(13,59,42,0.7), rgba(8,42,29,0.8)), url('${packageData.image}'); padding: 1.5rem; color: white; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.8rem; font-family: 'Amiri', serif;">${packageData.title}</h2>
+                    <p style="opacity: 0.9;">By ${packageData.agent}</p>
+                    <div style="font-size: 1.4rem; font-weight: 700; color: var(--secondary);">${packageData.price}</div>
+                </div>
+                <div class="detail-section">
+                    <h4><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> Overview</h4>
+                    <p>${packageData.description}</p>
+                </div>
+                <div class="detail-section">
+                    <h4><i class="fas fa-star" style="color: var(--secondary); margin-right: 8px;"></i> Key Features</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem;">
+                        ${packageData.features.map(f => `<span class="feature">${f}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="detail-section" style="background: var(--accent-bg); padding: 1.2rem; border-radius: 10px; margin: 1.2rem 0;">
+                    <h4><i class="fas fa-route" style="color: var(--primary); margin-right: 8px;"></i> Itinerary Highlights</h4>
+                    <ul style="padding-left: 1.4rem; color: var(--gray);">
+                        <li>Arrival in Jeddah / Makkah</li>
+                        <li>Perform Umrah rituals with guidance</li>
+                        <li>Ziyarat in Makkah & Madinah</li>
+                        <li>Comfortable return arrangements</li>
+                    </ul>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0;">
+                    <div style="background: #f8f9f5; padding: 1rem; border-radius: 8px;">
+                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-check-circle"></i> Included</h5>
+                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
+                            <li>Round-trip flights</li>
+                            <li>Hotel near Haram</li>
+                            <li>Visa processing</li>
+                            <li>Meals (as per plan)</li>
+                        </ul>
+                    </div>
+                    <div style="background: #fdf6f0; padding: 1rem; border-radius: 8px;">
+                        <h5 style="color: var(--primary); margin-bottom: 0.6rem;"><i class="fas fa-exclamation-circle"></i> Notes</h5>
+                        <ul style="font-size: 0.95rem; padding-left: 1.2rem;">
+                            <li>50% advance payment</li>
+                            <li>Subject to availability</li>
+                            <li>Children under 2: free</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            document.getElementById('package-detail-modal').style.display = 'block';
+        }
         function openBookingModal() {
             if (currentPackage) {
                 document.getElementById('package-name').value = currentPackage.title;
@@ -1765,79 +1790,51 @@ async function loadPackagesForBooking() {
                 };
                 await register(userData);
             });
-              <!-- Customer Booking Form -->
-            <!-- Customer Booking Form -->
-<form id="booking-form">
-  <select id="package-select" required>
-    <option value="">-- Select Package --</option>
-    <!-- Options will be loaded by JS -->
-  </select>
-  
-  <input type="email" id="email" placeholder="Your Email" required />
-  <input type="number" id="passengers" placeholder="Passengers" min="1" value="1" required />
-  
-  <button type="submit">Book Now</button>
-</form>
-
-<script>
-// Load packages when page loads
-document.addEventListener('DOMContentLoaded', loadPackagesForBooking);
-
-// Handle form submission
+            // Booking form
 document.getElementById('booking-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await submitBooking();
-});
-
-// Load packages into dropdown
-async function loadPackagesForBooking() {
-  const { data, error } = await supabase
-    .from('umrah_packages')
-    .select('id, name, price')
-    .eq('is_active', true);
-  
-  if (error) return console.error('Load packages:', error);
-  
-  const select = document.getElementById('package-select');
-  data.forEach(pkg => {
-    const opt = document.createElement('option');
-    opt.value = pkg.id;
-    opt.textContent = `${pkg.name} - MVR ${pkg.price}`;
-    select.appendChild(opt);
-  });
-}
-
-// Your booking submission function
-async function submitBooking() {
-  const selectedPackageId = document.getElementById('package-select').value;
-  const userEmail = document.getElementById('email').value;
-  const passengerCount = document.getElementById('passengers').value;
-
-  if (!selectedPackageId) {
-    alert('Please select a valid package');
-    return;
-  }
-
-  const { error } = await supabase
-    .from('bookings')
-    .insert({
-      package_id: selectedPackageId,
-      user_email: userEmail,
-      passenger_count: passengerCount,
-      // Add other fields from your form
-    });
-
-  if (error) {
-    if (error.code === '23503') {
-      alert('This package is no longer available. Please refresh and choose another.');
-    } else {
-      alert('Booking failed: ' + error.message);
+    e.preventDefault();
+    // 🔒 CRITICAL: Ensure a package is selected
+    if (!currentPackage) {
+        alert('❌ No package selected. Please choose a package first.');
+        return;
     }
-  } else {
-    alert('Booking submitted successfully!');
-    document.getElementById('booking-form').reset();
-  }
-}
+    const passengers = parseInt(document.getElementById('passengers').value) || 1;
+    const pilgrimNames = [];
+    const pilgrimDOBs = [];
+    for (let i = 1; i <= passengers; i++) {
+        const name = document.querySelector(`[name="pilgrim-name-${i}"]`)?.value || 'N/A';
+        const dob = document.querySelector(`[name="pilgrim-dob-${i}"]`)?.value || 'N/A';
+        pilgrimNames.push(name);
+        pilgrimDOBs.push(dob);
+    }
+    const bookingData = {
+        packageId: currentPackage.id,
+        packageName: currentPackage.title,
+        userEmail: document.getElementById('email').value,
+        userPhone: document.getElementById('phone').value,
+        passengers: passengers,
+        pilgrimNames: JSON.stringify(pilgrimNames),
+        pilgrimDOBs: JSON.stringify(pilgrimDOBs),
+        specialRequests: document.getElementById('message').value
+    };
+    const supabaseResult = await saveBookingToSupabase(bookingData);
+    if (supabaseResult) {
+        // ✅ ADD THIS SUCCESS LOGIC:
+        // 1. Hide the form
+        document.getElementById('booking-form').style.display = 'none';
+        // 2. Show the booking slip
+        document.getElementById('booking-slip').style.display = 'block';
+        // 3. Populate the slip with data
+        document.getElementById('slip-package').textContent = currentPackage.title;
+        document.getElementById('slip-pilgrims').textContent = passengers + " pilgrim(s)";
+        document.getElementById('slip-contact').textContent = document.getElementById('email').value + " / " + document.getElementById('phone').value;
+        document.getElementById('slip-agency').textContent = currentPackage.agent;
+        // 4. Scroll to top of modal to see confirmation
+        document.getElementById('booking-modal').scrollTo(0, 0);
+    } else {
+        alert('❌ Failed to save booking. Please try again.');
+    }
+});
             // Inquiry form
             document.getElementById('inquiry-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -1934,13 +1931,6 @@ async function submitBooking() {
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
 
 
 
