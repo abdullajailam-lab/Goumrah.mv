@@ -1251,11 +1251,9 @@
                 if (error) throw error;
 
                 // Map Supabase fields to your UI structure
-               umrahGroups = data.map(pkg => ({
-    id: pkg.id,  // ✅ This is a real UUID like "a1b2c3d4-..."
-    title: pkg.name,
-    // ...
-}));
+                umrahGroups = data.map(pkg => ({
+                    id: pkg.id,
+                    title: pkg.name,
                     agent: pkg.business_id ? 'Agency id: ' + pkg.business_id : 'Unknown Agency',
                     price: `MVR ${parseFloat(pkg.price).toLocaleString()}`,
                     departure: new Date(pkg.departure_date).toLocaleDateString('en-GB'),
@@ -1290,9 +1288,10 @@
                 // Load Umrah packages from the correct table
                 const umrahLoaded = await loadUmrahPackagesFromSupabase();
                 if (!umrahLoaded) {
-    umrahGroups = []; // Or show error message
-    alert("⚠️ Packages not available right now. Please try again later.");
-}
+                    // Fallback to local data if Supabase fails
+                    umrahGroups = [...localUmrahGroups];
+                }
+
                 // Load Hajj packages (unchanged)
                 const { data: hajjData, error: hajjError } = await supabase
                     .from('packages')
@@ -1932,7 +1931,6 @@ document.getElementById('booking-form').addEventListener('submit', async (e) => 
     </script>
 </body>
 </html>
-
 
 
 
